@@ -2,9 +2,9 @@ package com.example.potejsp.vote;
 
 import java.time.LocalDateTime;
 
-public class Vote {
+public class Board {
 
-    public int voteId;
+    public int boardId;
 
     public String title;
 
@@ -16,11 +16,11 @@ public class Vote {
     public String address;
 
 
-    public Vote() {
+    public Board() {
     }
 
-    public Vote(int voteId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
-        this.voteId = voteId;
+    public Board(int boardId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
+        this.boardId = boardId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -28,7 +28,7 @@ public class Vote {
         this.address = address;
     }
 
-    public Vote(String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
+    public Board(String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -44,12 +44,12 @@ public class Vote {
         this.nickname = nickname;
     }
 
-    public int getVoteId() {
-        return voteId;
+    public int getBoardId() {
+        return boardId;
     }
 
-    public void setVoteId(int voteId) {
-        this.voteId = voteId;
+    public void setBoardId(int boardId) {
+        this.boardId = boardId;
     }
 
     public String getTitle() {

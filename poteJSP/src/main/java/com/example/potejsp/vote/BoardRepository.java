@@ -1,28 +1,27 @@
 package com.example.potejsp.vote;
 
-import com.example.potejsp.Search.VoteModel;
 
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VoteRepository {
+public class BoardRepository {
 
     //저장
-    public Vote saveVote(Vote vote) throws SQLException {
+    public Board saveBoard(Board board) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO vote (title, start_date, end_date, nickname, address) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO board (title, start_date, end_date, nickname, address) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         // INSERT 쿼리에 파라미터 설정
-        pstmt.setString(1, vote.getTitle());
-        pstmt.setString(2, vote.getStartDate().toString());
-        pstmt.setString(3, vote.getEndDate().toString());
-        pstmt.setString(4, vote.getNickname());
-        pstmt.setString(5, vote.getAddress());
+        pstmt.setString(1, board.getTitle());
+        pstmt.setString(2, board.getStartDate().toString());
+        pstmt.setString(3, board.getEndDate().toString());
+        pstmt.setString(4, board.getNickname());
+        pstmt.setString(5, board.getAddress());
 
         pstmt.executeUpdate();
 
@@ -30,24 +29,24 @@ public class VoteRepository {
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         if (generatedKeys.next()) {
             int generatedId = generatedKeys.getInt(1);
-            vote.setVoteId(generatedId);
+            board.setBoardId(generatedId);
         }
 
         System.out.println("저장 완료");
 
         connection.close();
 
-        return vote;
+        return board;
     }
 
 
     //전체조회 (페이징)
-    public List<Vote> findAll(int pageNumber) throws SQLException {
+    public List<Board> findAll(int pageNumber) throws SQLException {
         int pageSize = 5; // 페이지당 결과 수
 
         Connection connection = DBConnection.getConnection();
 
-        String sql = "SELECT * FROM vote ORDER BY start_date DESC LIMIT ?, ?";
+        String sql = "SELECT * FROM board ORDER BY start_date DESC LIMIT ?, ?";
 
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setInt(1, (pageNumber - 1) * pageSize);
@@ -55,45 +54,45 @@ public class VoteRepository {
 
         ResultSet rs = pstmt.executeQuery();
 
-        List<Vote> votes = new ArrayList<>();
+        List<Board> boards = new ArrayList<>();
 
         while (rs.next()) {
-            int id = rs.getInt("vote_id");
+            int id = rs.getInt("board_id");
             String title = rs.getString("title");
             LocalDateTime startDate = rs.getTimestamp("start_date").toLocalDateTime();
             LocalDateTime endDate = rs.getTimestamp("end_date").toLocalDateTime();
             String nickname = rs.getString("nickname");
             String address = rs.getString("address");
 
-            Vote vote = new Vote(id, title, startDate, endDate, nickname, address);
-            votes.add(vote);
+            Board board = new Board(id, title, startDate, endDate, nickname, address);
+            boards.add(board);
         }
 
         connection.close();
 
-        return votes;
+        return boards;
     }
 
 
-    private static final String SELECT_ALL_QUERY = "SELECT * FROM vote WHERE ";
+    private static final String SELECT_ALL_QUERY = "SELECT * FROM board WHERE ";
     private static final String TITLE_CONDITION = "title LIKE ?";
     private static final String NICKNAME_CONDITION = "nickname LIKE ?";
     private static final String PROGRESS_LIST_QUERY = "end_date > NOW()";
 
-    public static List<Vote> searchByTitle(String target) throws SQLException {
+    public static List<Board> searchByTitle(String target) throws SQLException {
         return executeSearchQuery(SELECT_ALL_QUERY + TITLE_CONDITION, "%" + target + "%");
     }
 
-    public static List<Vote> searchByNickname(String nickname) throws SQLException {
+    public static List<Board> searchByNickname(String nickname) throws SQLException {
         return executeSearchQuery(SELECT_ALL_QUERY + NICKNAME_CONDITION, "%" + nickname + "%");
     }
 
-    public static List<Vote> progressList() throws SQLException {
+    public static List<Board> progressList() throws SQLException {
         return executeSearchQuery(SELECT_ALL_QUERY + PROGRESS_LIST_QUERY);
     }
 
-    private static List<Vote> executeSearchQuery(String query, Object... params) throws SQLException {
-        Connection connection = com.example.potejsp.Search.DBConnection.getConnection();
+    private static List<Board> executeSearchQuery(String query, Object... params) throws SQLException {
+        Connection connection = DBConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(query);
 
         for (int i = 0; i < params.length; i++) {
@@ -102,16 +101,16 @@ public class VoteRepository {
 
         ResultSet rs = statement.executeQuery();
 
-        List<Vote> list = new ArrayList<>();
+        List<Board> list = new ArrayList<>();
         while (rs.next()) {
-            Vote vote = new Vote();
-            vote.setVoteId(rs.getInt("vote_id"));
-            vote.setAddress(rs.getString("address"));
-            vote.setTitle(rs.getString("title"));
-            vote.setNickname(rs.getString("nickname"));
-            vote.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
-            vote.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
-            list.add(vote);
+            Board board = new Board();
+            board.setBoardId(rs.getInt("board_id"));
+            board.setAddress(rs.getString("address"));
+            board.setTitle(rs.getString("title"));
+            board.setNickname(rs.getString("nickname"));
+            board.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
+            board.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+            list.add(board);
         }
 
         rs.close();

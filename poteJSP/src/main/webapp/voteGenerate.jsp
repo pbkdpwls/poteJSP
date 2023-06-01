@@ -130,7 +130,7 @@
         <button type="button" id="addMenuButton">항목 추가하기</button>
         <br><br>
         <button type="submit">생성하기</button>
-        <button type="button">취소하기</button>
+        <button type="button" onclick="history.back()">취소하기</button>
     </form>
 </div>
 </body>

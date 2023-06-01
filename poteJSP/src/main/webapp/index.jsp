@@ -4,6 +4,11 @@
 <head>
     <title>Index Page</title>
     <style>
+        body{
+            margin:0;
+            padding:0;
+            width:100%;
+        }
         .header {
             height: 70px;
             width: 100%;
@@ -16,7 +21,43 @@
             height: 2px;
             width: 100%;
             background-color: #DBDBDB;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
+        }
+
+        .indexBody{
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .indexHeader{
+            display: flex;
+            flex-direction: row;
+            margin-bottom: 10px;
+        }
+
+        .indexHeaderSearchInput{
+            width: 500px;
+            height: 30px;
+            font-size: 15px;
+            padding:10px;
+            box-sizing: border-box;
+            margin-right:180px;
+        }
+
+        .indexHeaderTitle{
+            font-size: 30px;
+            font-weight: bold;
+            margin-right: 30px;
+        }
+
+        .indexHeaderFilter{
+            fotn-size: 18px;
+            font-weight: bold;
+            color: dimgray;
         }
 
         .buttons {
@@ -95,6 +136,15 @@
         var details = document.getElementById("details");
         details.style.display = (details.style.display === "none") ? "block" : "none";
     }
+
+    function isVoteChecked(){
+        var voteCheckBox = document.getElementById("isVoted");
+        if(voteCheckBox.checked==true){
+
+        }else{
+
+        }
+    }
 </script>
 <body>
 <div class="header">
@@ -109,19 +159,32 @@
 </div>
 <div class="divider"></div>
 
-<div class="component" onclick="toggleDetails()">
-    <div style="font-weight: bold; font-size: 30px; margin-top:20px">VOTE 팀 야식 메뉴</div>
-    <div style="font-weight: bold; font-size: 17px; margin-top:5px">06.01 15:00  서울</div>
-</div>
-<div class="details" id="details">
-    <% String[] menu = {"Menu 1", "Menu 2", "Menu 3"}; %>
-    <div class="item">
-        <% for (String item : menu) { %>
-        <div><%= item %></div>
-        <% } %>
+<div class="indexBody">
+    <div class="indexHeader">
+        <div class="indexHeaderTitle">투표 목록</div>
+        <input type="text" name="searchInput" id="searchInput" class="indexHeaderSearchInput">
+        <div class="indexHeaderFilter">
+            진행중인 투표만 보기
+            <label>
+                <input type="checkbox" id="isVoted" name="isVoted" onclick="isVoteChecked()">
+            </label>
+        </div>
     </div>
-    <div class="btn" onclick="toggleDetails()">확인</div>
-</div>
 
+    <div class="component" onclick="toggleDetails()">
+        <div style="font-weight: bold; font-size: 30px; margin-top:20px">VOTE 팀 야식 메뉴</div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px">06.01 15:00 / 서울 / 오세훈</div>
+    </div>
+    <div class="details" id="details">
+        <% String[] menu = {"Menu 1", "Menu 2", "Menu 3"}; %>
+        <div class="item">
+            <% for (String item : menu) { %>
+            <div><%= item %></div>
+            <% } %>
+        </div>
+        <div class="btn" onclick="toggleDetails()">확인</div>
+    </div>
+
+</div>
 </body>
 </html>

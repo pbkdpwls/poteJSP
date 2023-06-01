@@ -1,5 +1,7 @@
 package com.example.potejsp.vote;
 
+import com.example.potejsp.Search.VoteModel;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -73,6 +75,49 @@ public class VoteRepository {
     }
 
 
+    private static final String SELECT_ALL_QUERY = "SELECT * FROM vote WHERE ";
+    private static final String TITLE_CONDITION = "title LIKE ?";
+    private static final String NICKNAME_CONDITION = "nickname LIKE ?";
+    private static final String PROGRESS_LIST_QUERY = "end_date > NOW()";
 
+    public static List<Vote> searchByTitle(String target) throws SQLException {
+        return executeSearchQuery(SELECT_ALL_QUERY + TITLE_CONDITION, "%" + target + "%");
+    }
+
+    public static List<Vote> searchByNickname(String nickname) throws SQLException {
+        return executeSearchQuery(SELECT_ALL_QUERY + NICKNAME_CONDITION, "%" + nickname + "%");
+    }
+
+    public static List<Vote> progressList() throws SQLException {
+        return executeSearchQuery(SELECT_ALL_QUERY + PROGRESS_LIST_QUERY);
+    }
+
+    private static List<Vote> executeSearchQuery(String query, Object... params) throws SQLException {
+        Connection connection = com.example.potejsp.Search.DBConnection.getConnection();
+        PreparedStatement statement = connection.prepareStatement(query);
+
+        for (int i = 0; i < params.length; i++) {
+            statement.setObject(i + 1, params[i]);
+        }
+
+        ResultSet rs = statement.executeQuery();
+
+        List<Vote> list = new ArrayList<>();
+        while (rs.next()) {
+            Vote vote = new Vote();
+            vote.setVoteId(rs.getInt("vote_id"));
+            vote.setAddress(rs.getString("address"));
+            vote.setTitle(rs.getString("title"));
+            vote.setNickname(rs.getString("nickname"));
+            vote.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
+            vote.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+            list.add(vote);
+        }
+
+        rs.close();
+        statement.close();
+        connection.close();
+        return list;
+    }
 
 }

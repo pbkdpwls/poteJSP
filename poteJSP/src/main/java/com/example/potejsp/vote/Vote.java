@@ -15,6 +15,10 @@ public class Vote {
     public String nickname;
     public String address;
 
+
+    public Vote() {
+    }
+
     public Vote(int voteId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
         this.voteId = voteId;
         this.title = title;

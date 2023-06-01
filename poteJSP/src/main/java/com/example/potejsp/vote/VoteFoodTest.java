@@ -1,7 +1,9 @@
 package com.example.potejsp.vote;
 
+
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class VoteFoodTest {
 
@@ -20,14 +22,29 @@ public class VoteFoodTest {
 //        System.out.println(food.getVoteId());
 
 
-        for (Vote findVote : voteRepository.findAll(2)) {
-            System.out.println(findVote.getVoteId());
-            System.out.println(findVote.getTitle());
-            System.out.println(findVote.getStartDate());
-            System.out.println(findVote.getEndDate());
-            System.out.println(findVote.getAddress());
-            System.out.println("===========================");
-        }
+//        for (Vote findVote : voteRepository.findAll(2)) {
+//            System.out.println(findVote.getVoteId());
+//            System.out.println(findVote.getTitle());
+//            System.out.println(findVote.getStartDate());
+//            System.out.println(findVote.getEndDate());
+//            System.out.println(findVote.getAddress());
+//            System.out.println("===========================");
+//        }
+
+
+//        List<Vote> list;
+//        list = voteRepository.searchByTitle("버거킹");
+//        for (Vote voteModel : list) {
+//            System.out.println(voteModel.getAddress());
+//        }
+//        list = voteRepository.searchByNickname("예진");
+//        for (Vote voteModel : list) {
+//            System.out.println(voteModel.getAddress());
+//        }
+//        list = voteRepository.progressList();
+//        for (Vote voteModel : list) {
+//            System.out.println(voteModel.getTitle());
+//        }
 
 
     }

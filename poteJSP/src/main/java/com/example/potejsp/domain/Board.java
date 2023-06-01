@@ -1,4 +1,4 @@
-package com.example.potejsp.vote;
+package com.example.potejsp.domain;
 
 import java.time.LocalDateTime;
 

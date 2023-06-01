@@ -1,21 +1,22 @@
-package com.example.potejsp.vote;
+package com.example.potejsp.repository;
+
+import com.example.potejsp.domain.Item;
 
 import java.sql.*;
 
-public class FoodRepository {
+public class ItemRepository {
 
     //targetVote의 id를 food에 외래키로 지정하여 저장
-    public Food saveFood(int voteId, Food food) throws SQLException {
+    public Item saveFood(int boardId, Item item) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO food (name, decision, vote_id) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO item (name, board_id) VALUES (?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         // INSERT 쿼리에 파라미터 설정
-        pstmt.setString(1, food.getName());
-        pstmt.setBoolean(2, food.isDecision());
-        pstmt.setInt(3, voteId);
+        pstmt.setString(1, item.getName());
+        pstmt.setInt(2, boardId);
 
         pstmt.executeUpdate();
 
@@ -23,14 +24,13 @@ public class FoodRepository {
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         if (generatedKeys.next()) {
             int generatedId = generatedKeys.getInt(1);
-            food.setFoodId(generatedId);
+            item.setItemId(generatedId);
         }
 
         System.out.println("저장 완료");
 
         connection.close();
 
-        return food;
-
+        return item;
     }
 }

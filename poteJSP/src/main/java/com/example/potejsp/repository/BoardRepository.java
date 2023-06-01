@@ -1,5 +1,7 @@
-package com.example.potejsp.vote;
+package com.example.potejsp.repository;
 
+
+import com.example.potejsp.domain.Board;
 
 import java.sql.*;
 import java.time.LocalDateTime;

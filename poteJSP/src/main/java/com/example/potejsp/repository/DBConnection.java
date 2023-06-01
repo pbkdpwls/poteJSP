@@ -1,4 +1,4 @@
-package com.example.potejsp.vote;
+package com.example.potejsp.repository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,17 @@
+<%@ page import="com.example.potejsp.login.User" %>
+<%@ page import="com.example.potejsp.login.JWToken" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%! User user = null; %>
+<%
+    String token = (String) session.getAttribute("token");
+    if (token == null) {
+        response.sendRedirect("index.jsp");
+    }
+    user = JWToken.validTokenAndGetUser(token);
+    if (user == null) {
+        response.sendRedirect("index.jsp");
+    }
+%>
 <!DOCTYPE html>
 <html>
 <head>

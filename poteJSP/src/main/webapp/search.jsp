@@ -7,7 +7,8 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%! User user = null; %>
+<%!
+    User user = null; %>
 <%
     String token = (String) session.getAttribute("token");
     if (token == null) {
@@ -202,7 +203,7 @@
     <div class="buttons loggedIn">
         <button onclick="location='main.jsp'">메인화면</button>
         <button onclick="location='voteGenerate.jsp'">투표생성</button>
-        <button id="logoutButton">로그아웃</button>
+        <button onclick="location='logout.jsp'">로그아웃</button>
     </div>
 </div>
 <div class="divider"></div>
@@ -210,8 +211,10 @@
 <div class="indexBody">
     <div class="indexHeader">
         <div class="indexHeaderTitle">투표 목록</div>
-        <input type="text" name="searchInput" id="searchInput" class="indexHeaderSearchInput">
-        <button onclick="search()">검색</button>
+        <form action="http://localhost:8080/pote/" method="GET">
+            <input type="text" name="searchInput" id="searchInput" class="indexHeaderSearchInput">
+            <button type="submit" onclick="search()">검색</button>
+        </form>
     </div>
 
     <%
@@ -226,6 +229,7 @@
             if (searchInput != null && !searchInput.isEmpty()) {
                 boardList = boardRepository.searchByTitle(searchInput);
             } else {
+                System.out.println(searchInput);
                 boardList = boardRepository.findAll(1);
             }
         } catch (SQLException e) {
@@ -262,10 +266,3 @@
 </div>
 </body>
 </html>
-
-<script>
-    document.getElementById("logoutButton").onclick = function() {
-        <% session.invalidate(); %>
-        location.href = "index.jsp";
-    };
-</script>

@@ -9,7 +9,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
-        String token = (String) session.getAttribute("token");
+    String token = (String) session.getAttribute("token");
     if (token == null) {
         response.sendRedirect("index.jsp");
         return ;
@@ -186,6 +186,11 @@
         element.classList.add("selected");
         selectedItemId = itemId; // 선택된 아이템 ID 저장
     }
+
+    function search(){
+        var searchInput = document.getElementById("searchInput").value;
+        location.href = "http://localhost:8080/pote/?searchInput=" + encodeURIComponent(searchInput);
+    }
 </script>
 
 <body>
@@ -195,7 +200,7 @@
         <button>회원가입</button>
     </div>
     <div class="buttons loggedIn">
-        <button onclick="location='search.jsp'">검색하기</button>
+        <button onclick="location='main.jsp'">메인화면</button>
         <button onclick="location='voteGenerate.jsp'">투표생성</button>
         <button id="logoutButton">로그아웃</button>
     </div>
@@ -205,9 +210,12 @@
 <div class="indexBody">
     <div class="indexHeader">
         <div class="indexHeaderTitle">투표 목록</div>
+        <input type="text" name="searchInput" id="searchInput" class="indexHeaderSearchInput">
+        <button onclick="search()">검색</button>
     </div>
 
     <%
+        String searchInput = request.getParameter("searchInput");
         BoardRepository boardRepository = new BoardRepository();
         ItemRepository itemRepository = new ItemRepository();
 
@@ -215,7 +223,11 @@
         List<Item> itemList = null;
 
         try {
-            boardList = boardRepository.findAll(1);
+            if (searchInput != null && !searchInput.isEmpty()) {
+                boardList = boardRepository.searchByTitle(searchInput);
+            } else {
+                boardList = boardRepository.findAll(1);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

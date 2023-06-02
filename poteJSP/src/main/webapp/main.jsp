@@ -188,6 +188,7 @@
         selectedItemId = itemId; // 선택된 아이템 ID 저장
     }
 </script>
+
 <body>
 <div class="header">
     <div class="buttons loggedOut">
@@ -196,7 +197,7 @@
     </div>
     <div class="buttons loggedIn">
         <button onclick="location='voteGenerate.jsp'">투표생성</button>
-        <button>로그아웃</button>
+        <button id="logoutButton">로그아웃</button>
     </div>
 </div>
 <div class="divider"></div>
@@ -257,3 +258,9 @@
 </body>
 </html>
 
+<script>
+    document.getElementById("logoutButton").onclick = function() {
+        <% session.invalidate(); %>
+        location.href = "index.jsp";
+    };
+</script>

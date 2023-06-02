@@ -29,7 +29,6 @@ public class NaverAPI {
         Map<String, String> requestHeaders = new HashMap<>();
         requestHeaders.put("Authorization", header);
         String responseBody = get(apiURL,requestHeaders);
-        System.out.println(responseBody);
         APIUser apiUser = null;
         try {
             ObjectMapper mapper = new ObjectMapper();

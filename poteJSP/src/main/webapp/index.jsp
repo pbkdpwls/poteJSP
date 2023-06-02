@@ -23,5 +23,7 @@
         <button type="submit" class="login-button">로그인</button>
     </form>
     <button onclick="location.href='join.jsp'">회원가입</button>
+    <button onclick="location.href='main.jsp'">HOME</button>
+
 </body>
 </html>

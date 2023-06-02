@@ -1,5 +1,11 @@
 <%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page import="com.example.potejsp.repository.BoardRepository" %>
+<%@ page import="com.example.potejsp.domain.Board" %>
+<%@ page import="com.example.potejsp.domain.Item" %>
+<%@ page import="com.example.potejsp.repository.ItemRepository"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -104,6 +110,7 @@
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.5s;
+            margin-bottom: 10px;
         }
 
         .details {
@@ -112,6 +119,7 @@
             background-color: #EBF0F9;
             padding: 10px;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .details .item div {
@@ -145,8 +153,8 @@
         }
     };
 
-    function toggleDetails() {
-        var details = document.getElementById("details");
+    function toggleDetails(boardId) {
+        var details = document.getElementById("details"+boardId);
         details.style.display = (details.style.display === "none") ? "block" : "none";
     }
 
@@ -184,19 +192,45 @@
         </div>
     </div>
 
-    <div class="component" onclick="toggleDetails()">
-        <div style="font-weight: bold; font-size: 30px; margin-top:20px">VOTE 팀 야식 메뉴</div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px">06.01 15:00 / 서울 / 오세훈</div>
+    <%
+        BoardRepository boardRepository = new BoardRepository();
+        ItemRepository itemRepository = new ItemRepository();
+
+        List<Board> boardList = null;
+        List<Item> itemList = null;
+
+        try {
+            boardList = boardRepository.findAll(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 게시물 목록 출력
+        for (Board board : boardList) {
+    %>
+    <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)">
+        <div style="font-weight: bold; font-size: 30px; margin-top:20px"><%= board.getTitle()%></div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
-    <div class="details" id="details">
-        <% String[] menu = {"Menu 1", "Menu 2", "Menu 3"}; %>
+    <div class="details" id="details<%=board.getBoardId()%>">
         <div class="item">
-            <% for (String item : menu) { %>
-            <div><%= item %></div>
-            <% } %>
+            <%
+                try {
+                    itemList = itemRepository.getItemList(board.getBoardId());
+                    for (Item item : itemList) { %>
+                        <div><%= item.getName() %></div>
+                    <% } %>
+            <%
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            %>
         </div>
-        <div class="btn" onclick="toggleDetails()">확인</div>
+        <div class="btn" onclick="toggleDetails(<%=board.getBoardId()%>)">확인</div>
     </div>
+    <%
+        }
+    %>
 
 </div>
 </body>

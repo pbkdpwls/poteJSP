@@ -1,43 +1,67 @@
-<%@ page import="com.example.potejsp.login.User" %>
-<%@ page import="com.example.potejsp.login.UserDAO" %>
-<%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page import="java.net.URL" %>
+<%@ page import="java.net.HttpURLConnection" %>
+<%@ page import="java.io.BufferedReader" %>
+<%@ page import="java.io.InputStreamReader" %>
+<%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
+<%@ page import="java.util.Map" %>
+<%@ page import="com.example.potejsp.login.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
+<html>
+<head>
+    <title>네이버로그인</title>
+</head>
+<body>
 <%
-    String email = request.getParameter("email");
-    String password = request.getParameter("password");
-    User user = UserDAO.userSelectByEmail(email);
-    if (user == null) {
-%>
-
-    <script>
-        alert("존재하지 않는 이메일입니다.");
-        location.href='index.jsp';
-    </script>
-
-<%
-    } else {
-        if (!user.getPassword().equals(password)) {
-
-%>
-
-    <script>
-        alert("비밀번호가 일치하지 않습니다.");
-        location.href='index.jsp';
-    </script>
-
-<%
+    String code = request.getParameter("code");
+    String state = request.getParameter("state");
+    String apiURL;
+    apiURL = "https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&";
+    apiURL += "client_id=" + NaverAPI.clientId;
+    apiURL += "&client_secret=" + NaverAPI.clientSecret;
+    apiURL += "&redirect_uri=" + NaverAPI.redirectURI;
+    apiURL += "&code=" + code;
+    apiURL += "&state=" + state;
+    String access_token = "";
+    String refresh_token = "";
+    try {
+        URL url = new URL(apiURL);
+        HttpURLConnection con = (HttpURLConnection)url.openConnection();
+        con.setRequestMethod("GET");
+        int responseCode = con.getResponseCode();
+        BufferedReader br;
+        if(responseCode == 200) { // 정상 호출
+            br = new BufferedReader(new InputStreamReader(con.getInputStream()));
         } else {
-            session.setAttribute("userID", user.getId());
-            session.setAttribute("token", JWToken.getToken(user));
-%>
-
-    <script>
-        alert("로그인 성공");
-        location.href='main.jsp';
-    </script>
-
-<%
+            throw new RuntimeException("API 요청과 응답에 실패했습니다. : " + responseCode);
         }
+        String inputLine;
+        StringBuffer res = new StringBuffer();
+        while ((inputLine = br.readLine()) != null) {
+            res.append(inputLine);
+        }
+        br.close();
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> map = mapper.readValue(res.toString(), Map.class);
+        access_token = (String) map.get("access_token");
+        refresh_token = (String) map.get("refresh_token");
+        APIUser apiUser = NaverAPI.getProfile(access_token);
+        if (apiUser == null) {
+            out.println("유저 정보를 가져오지 못했습니다.");
+            return ;
+        }
+        User user = UserDAO.userSelectByEmailAndNaverId(apiUser.getEmail(), apiUser.getNaverId());
+        if (user == null) {
+            session.setAttribute("apiUser", apiUser);
+            response.sendRedirect("join.jsp");
+            return;
+        }
+        session.setAttribute("token", JWToken.getToken(user));
+        response.sendRedirect("main.jsp");
+    } catch (Exception e) {
+        out.println(e);
+        return ;
     }
 %>
+</body>
+</html>

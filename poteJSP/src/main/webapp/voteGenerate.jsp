@@ -99,7 +99,7 @@
 <body>
 <div class="container">
     <h2>투표 생성</h2>
-    <form action="main.jsp" method="POST">
+    <form action="createVote.jsp" method="POST">
         <div>
             <label for="title">제목</label>
             <input type="text" name="title" id="title" required>

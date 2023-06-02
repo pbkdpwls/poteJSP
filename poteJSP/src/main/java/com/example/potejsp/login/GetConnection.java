@@ -5,8 +5,8 @@ import java.sql.DriverManager;
 
 public class GetConnection {
     public static Connection getConnection() {
-        String url = "jdbc:mysql://localhost:3306/pote";
-        String username = "saoh";
+        String url = "jdbc:mysql://localhost:3306/voteDB";
+        String username = "root";
         String password = "12345678";
         Connection conn = null;
 

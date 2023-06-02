@@ -6,7 +6,7 @@ import java.util.List;
 
 public class UserDAO {
     private static void getBookFromResultSet(ResultSet rs, User user) throws SQLException {
-        user.setId(rs.getInt("id"));
+        user.setId(rs.getInt("users_id"));
         user.setEmail(rs.getString("email"));
         user.setPassword(rs.getString("password"));
         user.setNickname(rs.getString("nickname"));

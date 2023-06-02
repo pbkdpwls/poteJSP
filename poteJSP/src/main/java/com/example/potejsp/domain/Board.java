@@ -14,26 +14,29 @@ public class Board {
 
     public String nickname;
     public String address;
+    public boolean isProgressed;
 
 
     public Board() {
     }
 
-    public Board(int boardId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
+    public Board(int boardId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address,boolean isProgressed) {
         this.boardId = boardId;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.nickname = nickname;
         this.address = address;
+        this.isProgressed = isProgressed;
     }
 
-    public Board(String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address) {
+    public Board(String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address,boolean isProgressed) {
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;
         this.nickname = nickname;
         this.address = address;
+        this.isProgressed = isProgressed;
     }
 
     public String getNickname() {
@@ -83,4 +86,8 @@ public class Board {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public boolean getIsProgressed(){return isProgressed;}
+
+    public void setIsProgressed(boolean isProgressed) {this.isProgressed = isProgressed;}
 }

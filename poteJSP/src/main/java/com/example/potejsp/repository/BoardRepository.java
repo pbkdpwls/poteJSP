@@ -65,8 +65,9 @@ public class BoardRepository {
             LocalDateTime endDate = rs.getTimestamp("end_date").toLocalDateTime();
             String nickname = rs.getString("nickname");
             String address = rs.getString("address");
+            boolean isProgressed = rs.getBoolean("isProgressed");
 
-            Board board = new Board(id, title, startDate, endDate, nickname, address);
+            Board board = new Board(id, title, startDate, endDate, nickname, address, isProgressed);
             boards.add(board);
         }
 
@@ -112,6 +113,7 @@ public class BoardRepository {
             board.setNickname(rs.getString("nickname"));
             board.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
             board.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+            board.setIsProgressed(rs.getBoolean("isProgressed"));
             list.add(board);
         }
 

@@ -3,9 +3,10 @@ package com.example.potejsp.login;
 public class User {
     int id;
     String email;
-    String password;
     String nickname;
     String address;
+
+    String naverId;
     int age;
 
     public User() {
@@ -27,14 +28,6 @@ public class User {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -49,6 +42,14 @@ public class User {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getNaverId() {
+        return naverId;
+    }
+
+    public void setNaverId(String naverId) {
+        this.naverId = naverId;
     }
 
     public int getAge() {

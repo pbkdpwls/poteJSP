@@ -14,16 +14,16 @@ public class BoardRepository {
     public Board saveBoard(Board board) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO board (title, start_date, end_date, nickname, address) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO board (title, end_date, nickname, address) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         // INSERT 쿼리에 파라미터 설정
         pstmt.setString(1, board.getTitle());
-        pstmt.setString(2, board.getStartDate().toString());
-        pstmt.setString(3, board.getEndDate().toString());
-        pstmt.setString(4, board.getNickname());
-        pstmt.setString(5, board.getAddress());
+        pstmt.setString(2, board.getEndDate().toString());
+        pstmt.setString(3, board.getNickname());
+        pstmt.setString(4, board.getAddress());
+
 
         pstmt.executeUpdate();
 

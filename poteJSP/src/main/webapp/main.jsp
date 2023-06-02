@@ -6,10 +6,12 @@
     String token = (String) session.getAttribute("token");
     if (token == null) {
         response.sendRedirect("index.jsp");
+        return ;
     }
     user = JWToken.validTokenAndGetUser(token);
     if (user == null) {
         response.sendRedirect("index.jsp");
+        return ;
     }
 %>
 <!DOCTYPE html>

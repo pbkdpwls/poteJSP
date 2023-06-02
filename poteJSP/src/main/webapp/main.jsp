@@ -1,9 +1,15 @@
 <%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page import="com.example.potejsp.repository.BoardRepository" %>
+<%@ page import="com.example.potejsp.domain.Board" %>
+<%@ page import="com.example.potejsp.domain.Item" %>
+<%@ page import="com.example.potejsp.repository.ItemRepository"%>
+<%@ page import="java.util.List" %>
+<%@ page import="java.sql.SQLException" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
-    String token = (String) session.getAttribute("token");
+        String token = (String) session.getAttribute("token");
     if (token == null) {
         response.sendRedirect("index.jsp");
         return ;
@@ -106,6 +112,7 @@
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.5s;
+            margin-bottom: 10px;
         }
 
         .details {
@@ -114,6 +121,7 @@
             background-color: #EBF0F9;
             padding: 10px;
             box-sizing: border-box;
+            margin-bottom: 10px;
         }
 
         .details .item div {
@@ -134,6 +142,9 @@
             margin: 10px;
             font-weight: bold;
         }
+        .item div.selected {
+            border: 2px solid red;
+        }
     </style>
 </head>
 <script>
@@ -147,18 +158,34 @@
         }
     };
 
-    function toggleDetails() {
-        var details = document.getElementById("details");
+    function toggleDetails(boardId) {
+        var details = document.getElementById("details"+boardId);
         details.style.display = (details.style.display === "none") ? "block" : "none";
+
+        var component = document.querySelector(".component[data-boardId='" + boardId + "']");
+        component.style.border = (details.style.display === "none") ? "none" : "2px solid red";
     }
 
-    function isVoteChecked(){
-        var voteCheckBox = document.getElementById("isVoted");
-        if(voteCheckBox.checked==true){
+    var selectedItemId = null; // 선택된 아이템의 ID를 저장할 변수
 
-        }else{
+    function toggleItem(element) {
+        var itemId = element.getAttribute("data-itemId"); // 클릭한 아이템의 ID를 가져옴
 
+        // 선택된 아이템이 있는 경우
+        if (selectedItemId !== null) {
+            var selectedItem = document.querySelector(".item div[data-itemId='" + selectedItemId + "']");
+            selectedItem.classList.remove("selected"); // 이전에 선택된 아이템의 스타일 제거
         }
+
+        // 클릭한 아이템이 선택되어 있는 아이템과 같은 경우 (해제)
+        if (selectedItemId === itemId) {
+            selectedItemId = null; // 선택된 아이템 ID 초기화
+            return;
+        }
+
+        // 클릭한 아이템에 선택된 스타일 적용
+        element.classList.add("selected");
+        selectedItemId = itemId; // 선택된 아이템 ID 저장
     }
 </script>
 <body>
@@ -186,20 +213,47 @@
         </div>
     </div>
 
-    <div class="component" onclick="toggleDetails()">
-        <div style="font-weight: bold; font-size: 30px; margin-top:20px">VOTE 팀 야식 메뉴</div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px">06.01 15:00 / 서울 / 오세훈</div>
+    <%
+        BoardRepository boardRepository = new BoardRepository();
+        ItemRepository itemRepository = new ItemRepository();
+
+        List<Board> boardList = null;
+        List<Item> itemList = null;
+
+        try {
+            boardList = boardRepository.findAll(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        // 게시물 목록 출력
+        for (Board board : boardList) {
+    %>
+    <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
+        <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
-    <div class="details" id="details">
-        <% String[] menu = {"Menu 1", "Menu 2", "Menu 3"}; %>
+    <div class="details" id="details<%=board.getBoardId()%>">
         <div class="item">
-            <% for (String item : menu) { %>
-            <div><%= item %></div>
+            <%
+                try {
+                    itemList = itemRepository.getItemList(board.getBoardId());
+                    for (Item item : itemList) { %>
+            <div onclick="toggleItem(this)"><%= item.getName() %></div>
             <% } %>
+            <%
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            %>
         </div>
-        <div class="btn" onclick="toggleDetails()">확인</div>
+        <div class="btn" onclick="toggleDetails(<%=board.getBoardId()%>)">확인</div>
     </div>
+    <%
+        }
+    %>
 
 </div>
 </body>
 </html>
+

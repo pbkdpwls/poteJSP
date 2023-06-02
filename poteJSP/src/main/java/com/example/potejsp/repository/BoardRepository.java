@@ -14,16 +14,16 @@ public class BoardRepository {
     public Board saveBoard(Board board) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO board (title, start_date, end_date, nickname, address) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO board (title, end_date, nickname, address) VALUES (?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         // INSERT 쿼리에 파라미터 설정
         pstmt.setString(1, board.getTitle());
-        pstmt.setString(2, board.getStartDate().toString());
-        pstmt.setString(3, board.getEndDate().toString());
-        pstmt.setString(4, board.getNickname());
-        pstmt.setString(5, board.getAddress());
+        pstmt.setString(2, board.getEndDate().toString());
+        pstmt.setString(3, board.getNickname());
+        pstmt.setString(4, board.getAddress());
+
 
         pstmt.executeUpdate();
 
@@ -65,8 +65,9 @@ public class BoardRepository {
             LocalDateTime endDate = rs.getTimestamp("end_date").toLocalDateTime();
             String nickname = rs.getString("nickname");
             String address = rs.getString("address");
+            boolean isProgressed = rs.getBoolean("isProgressed");
 
-            Board board = new Board(id, title, startDate, endDate, nickname, address);
+            Board board = new Board(id, title, startDate, endDate, nickname, address, isProgressed);
             boards.add(board);
         }
 
@@ -112,6 +113,7 @@ public class BoardRepository {
             board.setNickname(rs.getString("nickname"));
             board.setStartDate(rs.getTimestamp("start_date").toLocalDateTime());
             board.setEndDate(rs.getTimestamp("end_date").toLocalDateTime());
+            board.setIsProgressed(rs.getBoolean("isProgressed"));
             list.add(board);
         }
 

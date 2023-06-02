@@ -5,6 +5,6 @@ public class UserQuerry {
             "values (?, ?, ?, ? ,?)";
     public static final String SELECT_ALL = "select * from users";
     public static final String SELECT_BY_EMAIL = "select * from users where email = ?";
-    public static final String SELECT_BY_ID_AND_EMAIL = "select * from users where id = ? and email = ?";
+    public static final String SELECT_BY_ID_AND_EMAIL = "select * from users where users_id = ? and email = ?";
 
 }

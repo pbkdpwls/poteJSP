@@ -34,18 +34,40 @@ public class VoteFoodTest {
 //        }
 
 
-        List<Board> list;
-        list = boardRepository.searchByTitle("버거킹");
-        for (Board boardModel : list) {
-            System.out.println(boardModel.getAddress());
-        }
-        list = boardRepository.searchByNickname("예진");
-        for (Board boardModel : list) {
-            System.out.println(boardModel.getAddress());
-        }
-        list = boardRepository.progressList();
-        for (Board boardModel : list) {
-            System.out.println(boardModel.getTitle());
+//        List<Board> list;
+//        list = boardRepository.searchByTitle("버거킹");
+//        for (Board boardModel : list) {
+//            System.out.println(boardModel.getAddress());
+//        }
+//        list = boardRepository.searchByNickname("예진");
+//        for (Board boardModel : list) {
+//            System.out.println(boardModel.getAddress());
+//        }
+//        list = boardRepository.progressList();
+//        for (Board boardModel : list) {
+//            System.out.println(boardModel.getTitle());
+//        }
+
+
+//        List<Board> findBoard = boardRepository.searchByKeyword("조우현");
+//        for (Board board : findBoard) {
+//            System.out.println(board.getBoardId());
+//            System.out.println(board.getTitle());
+//            System.out.println(board.getStartDate());
+//            System.out.println(board.getEndDate());
+//            System.out.println(board.getNickname());
+//            System.out.println(board.getAddress());
+//            System.out.println(board.getIsProgressed());
+//            System.out.println("================================");
+//        }
+
+                for (Board findBoard : boardRepository.findAll(2)) {
+            System.out.println(findBoard.getBoardId());
+            System.out.println(findBoard.getTitle());
+            System.out.println(findBoard.getStartDate());
+            System.out.println(findBoard.getEndDate());
+            System.out.println(findBoard.getAddress());
+            System.out.println("===========================");
         }
 
 

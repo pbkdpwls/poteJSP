@@ -38,4 +38,18 @@ public class JWToken {
         }
         return true;
     }
+
+    public static User validTokenAndGetUser(String token) {
+        User user = null;
+        try {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secretKey)
+                    .parseClaimsJws(token)
+                    .getBody();
+            user = UserDAO.userSelectByIdAndEmail(Integer.parseInt(claims.getSubject()), claims.get("email").toString());
+        } catch (Exception e) {
+            return null;
+        }
+        return user;
+    }
 }

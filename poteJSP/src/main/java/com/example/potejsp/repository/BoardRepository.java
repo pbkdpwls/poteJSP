@@ -14,7 +14,7 @@ public class BoardRepository {
     public Board saveBoard(Board board) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO board (title, end_date, nickname, address) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO board (title, end_date, nickname, address,isProgressed) VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -23,7 +23,7 @@ public class BoardRepository {
         pstmt.setString(2, board.getEndDate().toString());
         pstmt.setString(3, board.getNickname());
         pstmt.setString(4, board.getAddress());
-
+        pstmt.setBoolean(5, board.getIsProgressed());
 
         pstmt.executeUpdate();
 

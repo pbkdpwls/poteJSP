@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NaverAPI {
-    public static String clientId = "Ec1jH20_qbceh6C_boru";
+    public static String clientId = "GpZWor5NleGtO0SrEzux";
     public static String clientSecret = "0onqj5TmvQ";
     public static String redirectURI;
 

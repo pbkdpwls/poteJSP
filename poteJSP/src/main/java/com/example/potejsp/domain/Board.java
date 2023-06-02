@@ -39,6 +39,10 @@ public class Board {
         this.isProgressed = isProgressed;
     }
 
+    public Board(String title, LocalDateTime parse, LocalDateTime parse1, String nickname, String location) {
+    }
+
+
     public String getNickname() {
         return nickname;
     }

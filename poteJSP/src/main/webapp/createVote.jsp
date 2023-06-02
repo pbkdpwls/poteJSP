@@ -35,7 +35,7 @@
         }
 
         // Board 객체 생성 및 값 설정
-        Board board = new Board(title, LocalDateTime.parse(deadline), LocalDateTime.parse(deadline), user.getNickname(),location);
+        Board board = new Board(title, LocalDateTime.parse(deadline), LocalDateTime.parse(deadline), user.getNickname(),location,true);
 
         try {
             // BoardRepository를 통해 Board를 저장합니다.
@@ -52,11 +52,11 @@
                 }
             }
 
-            out.println("<h2>투표가 생성되었습니다.</h2>");
+            out.print("<h2>투표 생성 성공</h2>");
             response.sendRedirect("main.jsp");
+            return;
         } catch (Exception e) {
-            // 저장 중 오류가 발생하면 오류 메시지를 출력합니다.
-            out.println("<h2>투표 생성 중 오류가 발생했습니다.</h2>");
+            out.print("<h2>투표 생성 시에 오류가 발생</h2>");
         }
     }
 %>

@@ -6,6 +6,9 @@
 <%@ page import="com.example.potejsp.repository.ItemRepository"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.ArrayList" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -273,26 +276,66 @@
 
         // 게시물 목록 출력
         for (Board board : boardList) {
+            HashMap<String, Integer> map;
+            try {
+                map = itemRepository.getVoteCount(board.getBoardId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
     %>
     <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
         <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
+
     <div class="details" id="details<%=board.getBoardId()%>">
-        <div class="item">
-            <%
-                try {
-                    itemList = itemRepository.getItemList(board.getBoardId());
-                    for (Item item : itemList) { %>
-            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"><%= item.getName() %></div>
-            <% } %>
-            <%
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            %>
-        </div>
-        <div class="btn" onclick="toggleDetails(<%=board.getBoardId()%>)">확인</div>
+        <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
+            <div class="item">
+                <%
+                    try {
+                        itemList = itemRepository.getItemList(board.getBoardId());
+                        int maxVoteCount = 0;
+                        List<String> maxVotedItems = new ArrayList<>();
+                        if (board.getIsProgressed() == false) {
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount > maxVoteCount) {
+                                    maxVoteCount = voteCount;
+                                }
+                            }
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount == maxVoteCount) {
+                                    maxVotedItems.add(item.getName());
+                                }
+                            }
+                        }
+                        for (Item item : itemList) {
+                            int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                %>
+
+                <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
+                     style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
+                    <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
+                        <%= board.getIsProgressed() == false ? "disabled" : "" %>>
+                    <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                    <%= item.getName() %> <%= voteCount %>
+                </div>
+                <%
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                %>
+            </div>
+            <button type="submit" class="btn"
+                    <%= board.getIsProgressed() == false ? "disabled" : "" %>
+                    onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
+
+        <button type="submit" class="btn" formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
+        <button type="submit" class="btn" formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
+    </form>
+
     </div>
     <%
         }

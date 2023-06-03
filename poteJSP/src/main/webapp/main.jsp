@@ -6,6 +6,8 @@
 <%@ page import="com.example.potejsp.repository.ItemRepository"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.HashMap" %>
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -273,6 +275,12 @@
 
         // 게시물 목록 출력
         for (Board board : boardList) {
+            HashMap<String, Integer> map;
+            try {
+                map = itemRepository.getVoteCount(board.getBoardId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
     %>
     <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
@@ -287,10 +295,11 @@
                     itemList = itemRepository.getItemList(board.getBoardId());
                     for (Item item : itemList) {
             %>
+
             <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>">
                 <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)">
                 <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
-                <%= item.getName() %>
+                <%= item.getName() %><%= "      "%><%= map.get(item.getName()) == null ? 0 : map.get(item.getName()) %>
             </div>
             <%
                     }

@@ -278,22 +278,31 @@
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
         <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
+
     <div class="details" id="details<%=board.getBoardId()%>">
+    <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
         <div class="item">
             <%
                 try {
                     itemList = itemRepository.getItemList(board.getBoardId());
-                    for (Item item : itemList) { %>
-            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"><%= item.getName() %></div>
-            <% } %>
+                    for (Item item : itemList) {
+            %>
+            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>">
+                <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)">
+                <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                <%= item.getName() %>
+            </div>
             <%
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             %>
         </div>
-        <div class="btn" onclick="toggleDetails(<%=board.getBoardId()%>)">확인</div>
+        <button type="submit" class="btn" onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
+    </form>
     </div>
+
     <%
         }
     %>

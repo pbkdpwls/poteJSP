@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class VoterRepository {
     public static final String INSERT_VOTER = "INSERT INTO voter (users_id, item_id) VALUES (?, ?)";
-    public static final String FIND_USER_ID = "SELECT users_id FROM voter WHERE item_id = ?";
+    public static final String FIND_USER_ID = "SELECT users_id, vote_id FROM voter WHERE item_id = ?";
     public static final String FIND_USER_ID_IN_BOARD = "SELECT users_id, voter.item_id, board_id " +
             "FROM voter " +
             "JOIN item ON item.item_id = voter.item_id " +
@@ -15,6 +15,11 @@ public class VoterRepository {
             "WHERE voter.users_id = ?\n" +
             "  AND voter.item_id = ?";
     public static final String UPDATE_ITEM_ID = "UPDATE voter SET item_id = ? WHERE users_id = ? AND item_id = ?";
+
+    public static final String GET_CUR_ITEM_ID = "select voter.item_id\n" +
+            "from voter\n" +
+            "join item i on voter.item_id = i.item_id\n" +
+            "WHERE users_id = ?";
 
     // 투표하기
     public int vote(int userId, int itemId) {
@@ -60,7 +65,7 @@ public class VoterRepository {
             if (statement != null) {
                 rs = statement.executeQuery();
                 while (rs.next()) {
-                    if(userId == rs.getInt("users_id")){
+                    if (userId == rs.getInt("users_id")) {
                         result = -1;
                         break;
                     }
@@ -88,14 +93,14 @@ public class VoterRepository {
     }
 
     // 투표 취소
-    public int undoVote(int userId, int itemId){
+    public int undoVote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
 
         int result = 0;
 
-        try (PreparedStatement statement = connection.prepareStatement(DELETE_VOTER)){
-            statement.setInt(1,userId);
-            statement.setInt(2,itemId);
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_VOTER)) {
+            statement.setInt(1, userId);
+            statement.setInt(2, itemId);
             result = statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,12 +114,22 @@ public class VoterRepository {
         return result;
     }
 
-    // 투표 아이템 변경
-    public int updateItemId(int userId, int currentItemId, int newItemId) {
+    // 투표한 아이템 변경
+    public int reVote(int userId, int newItemId) {
         Connection connection = DBConnection.getConnection();
 
         int result = 0;
-
+        int currentItemId = 0;
+        try (PreparedStatement statement = connection.prepareStatement(GET_CUR_ITEM_ID)) {
+            statement.setInt(1, userId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                currentItemId = rs.getInt("voter.item_id");
+                System.out.println("cur_item_id : " + currentItemId);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try (PreparedStatement pstmt = connection.prepareStatement(UPDATE_ITEM_ID)) {
             pstmt.setInt(1, newItemId);
             pstmt.setInt(2, userId);

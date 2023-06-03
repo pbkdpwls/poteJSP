@@ -300,6 +300,7 @@
                 <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)">
                 <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
                 <%= item.getName() %><%= "      "%><%= map.get(item.getName()) == null ? 0 : map.get(item.getName()) %>
+
             </div>
             <%
                     }
@@ -309,7 +310,10 @@
             %>
         </div>
         <button type="submit" class="btn" onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
+        <button type="submit" class="btn" formaction="reVote.jsp" >다시 투표하기</button>
+        <button type="submit" class="btn" formaction="undoVote.jsp" >투표 취소하기</button>
     </form>
+
     </div>
 
     <%

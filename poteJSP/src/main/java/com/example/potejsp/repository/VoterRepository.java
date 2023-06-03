@@ -13,7 +13,7 @@ public class VoterRepository {
             "FROM voter\n" +
             "WHERE voter.users_id = ?\n" +
             "  AND voter.item_id = ?";
-
+    public static final String UPDATE_ITEM_ID = "UPDATE voter SET item_id = ? WHERE users_id = ? AND item_id = ?";
     // 투표하기
     public int vote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
@@ -103,5 +103,30 @@ public class VoterRepository {
         }
         return result;
     }
+
+    // 투표 아이템 변경
+    public int updateItemId(int userId, int currentItemId, int newItemId) {
+        Connection connection = DBConnection.getConnection();
+
+        int result = 0;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(UPDATE_ITEM_ID)) {
+            pstmt.setInt(1, newItemId);
+            pstmt.setInt(2, userId);
+            pstmt.setInt(3, currentItemId);
+            result = pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
+    }
+
 }
 

@@ -1,6 +1,7 @@
 package com.example.potejsp.repository;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class VoterRepository {
     public static final String INSERT_VOTER = "INSERT INTO voter (users_id, item_id) VALUES (?, ?)";
@@ -14,6 +15,7 @@ public class VoterRepository {
             "WHERE voter.users_id = ?\n" +
             "  AND voter.item_id = ?";
     public static final String UPDATE_ITEM_ID = "UPDATE voter SET item_id = ? WHERE users_id = ? AND item_id = ?";
+
     // 투표하기
     public int vote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
@@ -57,8 +59,11 @@ public class VoterRepository {
 
             if (statement != null) {
                 rs = statement.executeQuery();
-                if (rs.next()) {
-                    result = -1;
+                while (rs.next()) {
+                    if(userId == rs.getInt("users_id")){
+                        result = -1;
+                        break;
+                    }
                 }
             }
 
@@ -127,6 +132,5 @@ public class VoterRepository {
 
         return result;
     }
-
 }
 

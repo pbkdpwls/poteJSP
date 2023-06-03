@@ -59,13 +59,13 @@ public class ItemRepository {
 
     public HashMap<String, Integer> getVoteCount(int boardId) throws SQLException {
         Connection connection = DBConnection.getConnection();
-        String query = "SELECT item.item_id,item.name, count(item.item_id) as 투표수\n" +
+        String query = "SELECT item.item_id, item.name, count(item.item_id) as 투표수\n" +
                 "FROM voter\n" +
                 "         JOIN item ON voter.item_id = item.item_id\n" +
                 "         JOIN board b ON item.board_id = b.board_id\n" +
                 "         JOIN users u ON voter.users_id = u.users_id\n" +
-                "WHERE boardId=?"+
-                "group by item.item_id , item.name";
+                "WHERE item.board_id = ?\n" +
+                "group by item.item_id, item.name";
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setInt(1, boardId);
         ResultSet rs = statement.executeQuery();

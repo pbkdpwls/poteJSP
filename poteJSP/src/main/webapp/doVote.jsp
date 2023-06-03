@@ -26,7 +26,7 @@
         // 투표 실행
         result = voterRepository.vote(user_id, item_id);
     } else {
-        System.out.println("중복 투표");
+        System.out.println("중복 투표 - 권한 없음");
 %>
 <script>
     alert("이미 투표를 한 항목입니다.");

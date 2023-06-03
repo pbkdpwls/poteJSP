@@ -1,29 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="1a76c98a-75dc-49d7-ade2-417119756de8" name="Changes" comment="" />
+    <list default="true" id="eaa775e2-999c-4b70-96a7-3bf97ead78eb" name="Changes" comment="투표 아이템 변경 메소드 추가">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/executionHistory/executionHistory.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/executionHistory/executionHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/7.1.1/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/login/NaverAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/login/NaverAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/repository/ItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/repository/ItemRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/repository/VoterRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/classes/java/main/com/example/potejsp/repository/VoterRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/login/NaverAPI.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/login/NaverAPI.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/repository/ItemRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/repository/ItemRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/repository/VoterRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/WEB-INF/classes/com/example/potejsp/repository/VoterRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/main.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/libs/exploded/poteJSP-1.0-SNAPSHOT.war/main.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/login/NaverAPI.java" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/login/NaverAPI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/repository/ItemRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/repository/ItemRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/repository/VoterRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/src/main/java/com/example/potejsp/repository/VoterRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/src/main/webapp/doVote.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/src/main/webapp/doVote.jsp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/poteJSP/src/main/webapp/main.jsp" beforeDir="false" afterPath="$PROJECT_DIR$/poteJSP/src/main/webapp/main.jsp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ProjectId" id="2QajFB0uD5W6bScYuZXiVmnQmFW" />
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="configurable.group.other" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/poteJSP">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Jsp File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2QfYhf7R13XzQBdhEBBrDpQptkU" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+    <option name="showScratchesAndConsoles" value="false" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "dart.analysis.tool.window.visible": "false",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "show.migrate.to.gradle.popup": "false",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="Tomcat 10.1.8" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 10.1.8" ALTERNATIVE_JRE_ENABLED="false" nameIsGenerated="true">
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:8080/test.jsp" />
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="Gradle : com.example : poteJSP-1.0-SNAPSHOT.war (exploded)">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="80cb9966-baa3-4788-9527-074e650bced2" />
+      </server-settings>
+      <predefined_log_file enabled="true" id="Tomcat" />
+      <predefined_log_file enabled="true" id="Tomcat Catalina" />
+      <predefined_log_file id="Tomcat Manager" />
+      <predefined_log_file id="Tomcat Host Manager" />
+      <predefined_log_file id="Tomcat Localhost Access" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="6506" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Profile">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method v="2">
+        <option name="Make" enabled="true" />
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="Gradle : com.example : poteJSP-1.0-SNAPSHOT.war (exploded)" />
+        </option>
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="1a76c98a-75dc-49d7-ade2-417119756de8" name="Changes" comment="" />
-      <created>1685598483400</created>
+      <changelist id="eaa775e2-999c-4b70-96a7-3bf97ead78eb" name="Changes" comment="" />
+      <created>1685746223901</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1685598483400</updated>
-      <workItem from="1685598503643" duration="3000" />
+      <updated>1685746223901</updated>
+      <workItem from="1685746225278" duration="19503000" />
     </task>
+    <task id="LOCAL-00001" summary="투표 서버에 넣기, 중복투표 검사 메소드 작성">
+      <created>1685758256169</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1685758256169</updated>
+    </task>
+    <task id="LOCAL-00002" summary="투표 서버에 넣기, 중복투표 검사 메소드 작성, 테스트완료">
+      <created>1685758333634</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1685758333634</updated>
+    </task>
+    <task id="LOCAL-00003" summary="투표 취소">
+      <created>1685759523549</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1685759523549</updated>
+    </task>
+    <task id="LOCAL-00004" summary="투표 아이템 변경 메소드 추가">
+      <created>1685759905193</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1685759905193</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="투표 서버에 넣기, 중복투표 검사 메소드 작성" />
+    <MESSAGE value="투표 서버에 넣기, 중복투표 검사 메소드 작성, 테스트완료" />
+    <MESSAGE value="투표 취소" />
+    <MESSAGE value="투표 아이템 변경 메소드 추가" />
+    <option name="LAST_COMMIT_MESSAGE" value="투표 아이템 변경 메소드 추가" />
   </component>
 </project>

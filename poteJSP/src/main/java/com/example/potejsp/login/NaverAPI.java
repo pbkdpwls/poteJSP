@@ -11,13 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NaverAPI {
-    public static String clientId = "fDNR_TzRQ3XFopSNCWJw";
-    public static String clientSecret = "kuAWqXy1Rp";
+    public static String clientId = "GpZWor5NleGtO0SrEzux";
+    public static String clientSecret = "D1h8BQs2XG";
     public static String redirectURI;
 
     static {
         try {
-            redirectURI = URLEncoder.encode("http://localhost:8080/login.jsp", "UTF-8");
+            redirectURI = URLEncoder.encode("http://localhost:8080/pote/login.jsp", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

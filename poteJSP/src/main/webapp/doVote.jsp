@@ -21,7 +21,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Vote</title>
-
 </head>
 <body>
 <%

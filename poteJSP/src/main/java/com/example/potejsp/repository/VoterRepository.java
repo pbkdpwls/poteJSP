@@ -45,43 +45,59 @@ public class VoterRepository {
 
         int result = 1;
 
-        try {
-            PreparedStatement statement = null;
-            ResultSet rs = null;
+        PreparedStatement statement1 = null;
+        PreparedStatement statement2 = null;
+        ResultSet rs = null;
 
-            if (mode == 0) { // 동일 아이템에 중복투표 불가
-                statement = connection.prepareStatement(FIND_USER_ID);
-                statement.setInt(1, itemId);
-            } else if (mode == 1) { // 동일 게시글에 중복투표 불가
-                statement = connection.prepareStatement(FIND_USER_ID_IN_BOARD);
-                statement.setInt(1, boardId);
+        try {
+            statement1 = connection.prepareStatement(FIND_USER_ID);
+            statement1.setInt(1, itemId);
+            rs = statement1.executeQuery();
+
+            while (rs.next()) {
+                if (userId == rs.getInt("users_id")) {
+                    result = -1;
+                    break;
+                }
             }
 
-            if (statement != null) {
-                rs = statement.executeQuery();
-                while (rs.next()) {
-                    if(userId == rs.getInt("users_id")){
-                        result = -1;
-                        break;
-                    }
+            statement2 = connection.prepareStatement(FIND_USER_ID_IN_BOARD);
+            statement2.setInt(1, boardId);
+            rs = statement2.executeQuery();
+
+            while (rs.next()) {
+                if (userId == rs.getInt("users_id")) {
+                    result = -1;
+                    break;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // 닫지 않은 statement, rs가 있는지 확인하고 닫기
+            if (statement1 != null) {
+                try {
+                    statement1.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (statement2 != null) {
+                try {
+                    statement2.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
 
             if (rs != null) {
-                rs.close();
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-
-            if (statement != null) {
-                statement.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return result;

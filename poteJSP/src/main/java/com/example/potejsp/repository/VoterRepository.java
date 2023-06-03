@@ -9,7 +9,12 @@ public class VoterRepository {
             "FROM voter " +
             "JOIN item ON item.item_id = voter.item_id " +
             "WHERE board_id = ?";
+    public static final String DELETE_VOTER = "DELETE\n" +
+            "FROM voter\n" +
+            "WHERE voter.users_id = ?\n" +
+            "  AND voter.item_id = ?";
 
+    // 투표하기
     public int vote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
 
@@ -77,6 +82,26 @@ public class VoterRepository {
         return result;
     }
 
+    // 투표 취소
+    public int undoVote(int userId, int itemId){
+        Connection connection = DBConnection.getConnection();
 
+        int result = 0;
+
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_VOTER)){
+            statement.setInt(1,userId);
+            statement.setInt(2,itemId);
+            result = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }
 

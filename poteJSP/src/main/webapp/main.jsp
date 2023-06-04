@@ -334,7 +334,10 @@
 
         <button type="submit" class="btn" formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
         <button type="submit" class="btn" formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
-    </form>
+        <button type="submit" class="btn" formaction="viewVoter.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기</button>
+
+
+        </form>
 
     </div>
     <%

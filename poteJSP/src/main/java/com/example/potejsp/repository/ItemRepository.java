@@ -78,4 +78,20 @@ public class ItemRepository {
         connection.close();
         return foodNameAndVoteCount;
     }
+
+    public HashMap<Integer, String> getItemNameInBoard(int boardId) throws SQLException {
+        Connection connection = DBConnection.getConnection();
+        String query = "SELECT * FROM item WHERE board_id = ?";
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setInt(1, boardId);
+        ResultSet rs = statement.executeQuery();
+        HashMap<Integer, String> map = new HashMap<>();
+        while (rs.next()) {
+            map.put(rs.getInt("item_id"), rs.getString("name"));
+        }
+        rs.close();
+        statement.close();
+        connection.close();
+        return map;
+    }
 }

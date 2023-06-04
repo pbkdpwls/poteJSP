@@ -1,7 +1,11 @@
 package com.example.potejsp.repository;
 
+import javax.ws.rs.core.MultivaluedHashMap;
+import javax.ws.rs.core.MultivaluedMap;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class VoterRepository {
     public static final String INSERT_VOTER = "INSERT INTO voter (users_id, item_id) VALUES (?, ?)";
@@ -25,6 +29,12 @@ public class VoterRepository {
             "from voter\n" +
             "join item i on voter.item_id = i.item_id\n" +
             "WHERE users_id = ? AND board_id =?";
+
+    public static final String GET_VOTER_LIST = "SELECT nickname, i.item_id, i.name\n" +
+            "FROM voter\n" +
+            "join users u on voter.users_id = u.users_id\n" +
+            "join item i on voter.item_id = i.item_id\n" +
+            "where board_id = ? order by voter.item_id";
 
     // 투표하기
     public int vote(int userId, int itemId) {
@@ -167,8 +177,38 @@ public class VoterRepository {
                 e.printStackTrace();
             }
         }
-
         return result;
     }
-}
 
+    public HashMap<Integer, List<String>> getVoterListMap(int boardId) {
+        HashMap<Integer, List<String>> map = new HashMap<>();
+        Connection connection = DBConnection.getConnection();
+        int newItemId = 0;
+        try (PreparedStatement statement = connection.prepareStatement(GET_VOTER_LIST)) {
+            statement.setInt(1, boardId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                int itemId = rs.getInt("item_id");
+                String nickname = rs.getString("nickname");
+
+                if (newItemId != itemId) {
+                    newItemId = itemId;
+                    List<String> voterlist = new ArrayList<>();
+                    voterlist.add(nickname);
+                    map.put(itemId, voterlist);
+                } else {
+                    List<String> voterlist = map.get(itemId);
+                    voterlist.add(nickname);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+}

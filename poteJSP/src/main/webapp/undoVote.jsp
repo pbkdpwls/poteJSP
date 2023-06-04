@@ -61,11 +61,10 @@
     <%-- 투표 완료 알림창 출력 및 main.jsp로 이동 --%>
     <% if (result > 0) { %>
     alert("ദ്ദി ᵔ∇ᵔ ) : 투표를 취소하였습니다.");
-    //window.location.replace("test.jsp") // 테스트용 나중에 지우기
     window.location.replace("main.jsp"); // main으로, 히스토리가 남지 않음.(뒤로가기 해도 doVote로 안감)
     <% } else { %>
     alert("‧₊˚(✘﹏✘) : 투표하지 않은 항목입니다. 다시 시도하여 주십시오");
-    window.location.replace("main.jsp"); // main으로, 히스토리가 남지 않음.(뒤로가기 해도 doVote로 안감)
+    window.location.replace("main.jsp");
     <% } %>
 </script>
 

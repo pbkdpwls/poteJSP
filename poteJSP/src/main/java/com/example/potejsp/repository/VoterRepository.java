@@ -14,12 +14,17 @@ public class VoterRepository {
             "FROM voter\n" +
             "WHERE voter.users_id = ?\n" +
             "  AND voter.item_id = ?";
-    public static final String UPDATE_ITEM_ID = "UPDATE voter SET item_id = ? WHERE users_id = ? AND item_id = ?";
+    public static final String UPDATE_ITEM_ID = "UPDATE voter \n" +
+            "JOIN item i ON voter.item_id = i.item_id\n" +
+            "SET voter.item_id = ?\n" +
+            "WHERE users_id = ?\n" +
+            "  AND voter.item_id = ?\n" +
+            "  AND i.board_id = ?;\n";
 
     public static final String GET_CUR_ITEM_ID = "select voter.item_id\n" +
             "from voter\n" +
             "join item i on voter.item_id = i.item_id\n" +
-            "WHERE users_id = ?";
+            "WHERE users_id = ? AND board_id =?";
 
     // 투표하기
     public int vote(int userId, int itemId) {
@@ -131,13 +136,14 @@ public class VoterRepository {
     }
 
     // 투표한 아이템 변경
-    public int reVote(int userId, int newItemId) {
+    public int reVote(int userId, int newItemId, int boardId) {
         Connection connection = DBConnection.getConnection();
 
         int result = 0;
         int currentItemId = 0;
         try (PreparedStatement statement = connection.prepareStatement(GET_CUR_ITEM_ID)) {
             statement.setInt(1, userId);
+            statement.setInt(2, boardId);
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 currentItemId = rs.getInt("voter.item_id");
@@ -150,6 +156,7 @@ public class VoterRepository {
             pstmt.setInt(1, newItemId);
             pstmt.setInt(2, userId);
             pstmt.setInt(3, currentItemId);
+            pstmt.setInt(4, boardId);
             result = pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

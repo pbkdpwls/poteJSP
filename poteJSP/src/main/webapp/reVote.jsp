@@ -37,14 +37,14 @@
     // 폼에서 값 받아오기
     int item_id = Integer.parseInt(request.getParameter("item_id"));
     int board_id = Integer.parseInt(request.getParameter("board_id"));
-    System.out.println("item_id: " + item_id);
+    System.out.println("new_item_id: " + item_id);
     System.out.println("board_id: " + board_id);
 
     VoterRepository voterRepository = new VoterRepository();
     int result = 0;
 
     // 투표 실행
-    result = voterRepository.reVote(user_id, item_id);
+    result = voterRepository.reVote(user_id, item_id,board_id);
 %>
 
 

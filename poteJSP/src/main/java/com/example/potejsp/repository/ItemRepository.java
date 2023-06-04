@@ -43,6 +43,7 @@ public class ItemRepository {
         return item;
     }
 
+    // 아이템 이름당 투표수 구하기
     public HashMap<String, Integer> getVoteCount(int boardId) throws SQLException {
         Connection connection = DBConnection.getConnection();
         PreparedStatement statement = connection.prepareStatement(Query.SELECT_VOTE_COUNT_QUERY);
@@ -58,18 +59,20 @@ public class ItemRepository {
         return foodNameAndVoteCount;
     }
 
-    public HashMap<Integer, String> getItemNameInBoard(int boardId) throws SQLException {
-        Connection connection = DBConnection.getConnection();
-        PreparedStatement statement = connection.prepareStatement(Query.SELECT_ITEM_NAMES_QUERY);
-        statement.setInt(1, boardId);
-        ResultSet rs = statement.executeQuery();
+    // 게시글의 아이템이름 가져오기
+    public HashMap<Integer, String> getItemNameInBoard(int boardId){
         HashMap<Integer, String> map = new HashMap<>();
-        while (rs.next()) {
-            map.put(rs.getInt("item_id"), rs.getString("name"));
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(Query.SELECT_ITEM_NAMES_QUERY)
+           ){
+            statement.setInt(1, boardId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                map.put(rs.getInt("item_id"), rs.getString("name"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        rs.close();
-        statement.close();
-        connection.close();
         return map;
     }
 }

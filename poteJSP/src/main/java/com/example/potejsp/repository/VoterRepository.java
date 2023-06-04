@@ -36,6 +36,10 @@ public class VoterRepository {
             "join item i on voter.item_id = i.item_id\n" +
             "where board_id = ? order by voter.item_id";
 
+    public static final String GET_BOARD_ADDR = "SELECT board_id, address from board where board_id = ?";
+    public static final String GET_USER_ADDR = "SELECT users_id, address FROM users WHERE users_id=?";
+
+
     // 투표하기
     public int vote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
@@ -123,6 +127,39 @@ public class VoterRepository {
         return result;
     }
 
+    // 작성자와 투표자가 같은 주소인지 검증
+    public int validateAddress(int board_id, int users_id) {
+        Connection connection = DBConnection.getConnection();
+        int result = 0;
+        String boardAddress = "";
+        String userAddress = "";
+        try (PreparedStatement statement = connection.prepareStatement(GET_BOARD_ADDR)) {
+            statement.setInt(1, board_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                boardAddress = rs.getString("address");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try (PreparedStatement statement = connection.prepareStatement(GET_USER_ADDR)) {
+            statement.setInt(1, users_id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                userAddress = rs.getString("address");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result = userAddress.equals(boardAddress) ? 1 : -1;
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
     // 투표 취소
     public int undoVote(int userId, int itemId) {
         Connection connection = DBConnection.getConnection();
@@ -163,26 +200,23 @@ public class VoterRepository {
             e.printStackTrace();
         }
         // 똑같은 항목으로 투표 시 -1 return
-        if(currentItemId == newItemId){
-            System.out.println(currentItemId);
-            System.out.println(newItemId);
-            result = -1;
-            return result;
-        }
-        try (PreparedStatement pstmt = connection.prepareStatement(UPDATE_ITEM_ID)) {
-            pstmt.setInt(1, newItemId);
-            pstmt.setInt(2, userId);
-            pstmt.setInt(3, currentItemId);
-            pstmt.setInt(4, boardId);
-            result = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                connection.close();
+        result = currentItemId == newItemId ? -1 : 0;
+
+        if (result != -1) {
+            try (PreparedStatement pstmt = connection.prepareStatement(UPDATE_ITEM_ID)) {
+                pstmt.setInt(1, newItemId);
+                pstmt.setInt(2, userId);
+                pstmt.setInt(3, currentItemId);
+                pstmt.setInt(4, boardId);
+                result = pstmt.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return result;
     }

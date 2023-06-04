@@ -7,6 +7,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.ArrayList" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
@@ -263,7 +264,7 @@
         // 현재 페이지 번호가 범위를 벗어나는 경우 첫 번째 또는 마지막 페이지로 이동
         if (currentPage < 1) {
             currentPage = 1;
-        } else if (currentPage > totalPages) {
+        } else if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
         }
 
@@ -288,34 +289,57 @@
     </div>
 
     <div class="details" id="details<%=board.getBoardId()%>">
-    <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
-        <div class="item">
-            <%
-                try {
-                    itemList = itemRepository.getItemList(board.getBoardId());
-                    for (Item item : itemList) {
-            %>
+        <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
+            <div class="item">
+                <%
+                    try {
+                        itemList = itemRepository.getItemList(board.getBoardId());
+                        int maxVoteCount = 0;
+                        List<String> maxVotedItems = new ArrayList<>();
+                        if (board.getIsProgressed() == false) {
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount > maxVoteCount) {
+                                    maxVoteCount = voteCount;
+                                }
+                            }
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount == maxVoteCount) {
+                                    maxVotedItems.add(item.getName());
+                                }
+                            }
+                        }
+                        for (Item item : itemList) {
+                            int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                %>
 
-            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>">
-                <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)">
-                <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
-                <%= item.getName() %><%= "      "%><%= map.get(item.getName()) == null ? 0 : map.get(item.getName()) %>
-
-            </div>
-            <%
+                <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
+                     style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
+                    <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
+                        <%= board.getIsProgressed() == false ? "disabled" : "" %>>
+                    <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                    <%= item.getName() %> <%= voteCount %>
+                </div>
+                <%
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            %>
-        </div>
-        <button type="submit" class="btn" onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
-        <button type="submit" class="btn" formaction="reVote.jsp" >다시 투표하기</button>
-        <button type="submit" class="btn" formaction="undoVote.jsp" >투표 취소하기</button>
-    </form>
+                %>
+            </div>
+            <button type="submit" class="btn"
+                    <%= board.getIsProgressed() == false ? "disabled" : "" %>
+                    onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
+
+        <button type="submit" class="btn" formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
+        <button type="submit" class="btn" formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
+        <button type="submit" class="btn" formaction="viewVoter.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기</button>
+
+
+        </form>
 
     </div>
-
     <%
         }
     %>

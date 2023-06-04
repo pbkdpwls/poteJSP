@@ -68,6 +68,6 @@
     window.location.replace("main.jsp"); // main으로, 히스토리가 남지 않음.(뒤로가기 해도 doVote로 안감)
     <% } %>
 </script>
--++-
+
 </body>
 </html>

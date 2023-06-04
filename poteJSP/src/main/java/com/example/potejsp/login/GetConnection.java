@@ -7,7 +7,7 @@ public class GetConnection {
     public static Connection getConnection() {
         String url = "jdbc:mysql://localhost:3306/votedb?characterEncoding=UTF-8";
         String username = "root";
-        String password = "12345678";
+        String password = "1234";
         Connection conn = null;
 
         try {

@@ -35,11 +35,21 @@
     int user_id = user.getId();
 
     // 폼에서 값 받아오기
-    int item_id = Integer.parseInt(request.getParameter("item_id"));
-    int board_id = Integer.parseInt(request.getParameter("board_id"));
-    System.out.println("new_item_id: " + item_id);
-    System.out.println("board_id: " + board_id);
+    String item_id_param = request.getParameter("item_id");
+    String board_id_param = request.getParameter("board_id");
+    System.out.println(item_id_param);
+    if (item_id_param == null || board_id_param == null) {
+%>
+<script>
+    alert("투표할 항목을 선택해주세요");
+    window.location.replace("main.jsp");
+</script>
+<%
+        return;
+    }
 
+    int item_id = Integer.parseInt(item_id_param);
+    int board_id = Integer.parseInt(board_id_param);
     VoterRepository voterRepository = new VoterRepository();
     int result = 0;
 

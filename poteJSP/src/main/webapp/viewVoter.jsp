@@ -67,6 +67,9 @@
 %>
 
 <div class="voter-list">
+  <% if (map.isEmpty()) { %>
+  <p>투표한 인원이 없습니다.</p>
+  <% } else { %>
   <% for (Map.Entry<Integer, List<String>> entry : map.entrySet()) { %>
   <div class="item">
     <span class="item-id">투표 항목: <%= nameMap.get(entry.getKey()) %></span>
@@ -76,6 +79,7 @@
       <% } %>
     </ul>
   </div>
+  <% } %>
   <% } %>
 </div>
 </body>

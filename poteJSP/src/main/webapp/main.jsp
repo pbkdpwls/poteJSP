@@ -264,7 +264,7 @@
         // 현재 페이지 번호가 범위를 벗어나는 경우 첫 번째 또는 마지막 페이지로 이동
         if (currentPage < 1) {
             currentPage = 1;
-        } else if (currentPage > totalPages) {
+        } else if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
         }
 

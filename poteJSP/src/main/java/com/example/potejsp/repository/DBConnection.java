@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-    private static final String server = "jdbc:mysql://localhost:3306/votedb?characterEncoding=UTF-8"; // MySQL 서버 주소
+    private static final String server = "jdbc:mysql://localhost:3306/votedb"; // MySQL 서버 주소
     private static final String user_name = "root"; //  MySQL 서버 아이디
     private static final String password = "12345678"; // MySQL 서버 비밀번호
 

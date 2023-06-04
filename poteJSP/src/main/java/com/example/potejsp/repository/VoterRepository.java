@@ -162,6 +162,13 @@ public class VoterRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        // 똑같은 항목으로 투표 시 -1 return
+        if(currentItemId == newItemId){
+            System.out.println(currentItemId);
+            System.out.println(newItemId);
+            result = -1;
+            return result;
+        }
         try (PreparedStatement pstmt = connection.prepareStatement(UPDATE_ITEM_ID)) {
             pstmt.setInt(1, newItemId);
             pstmt.setInt(2, userId);

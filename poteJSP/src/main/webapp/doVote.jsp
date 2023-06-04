@@ -19,7 +19,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
     <title>Vote</title>
 </head>
 <body>
@@ -33,7 +32,7 @@
     if (item_id_param == null || board_id_param == null) {
 %>
 <script>
-    alert("투표할 항목을 선택해주세요");
+    alert("( ˃̣̣̥᷄⌓˂̣̣̥᷅ ) : 투표할 항목을 선택해주세요.");
     window.location.replace("main.jsp");
 </script>
 <%
@@ -56,7 +55,7 @@
         System.out.println("중복 투표 - 권한 없음");
 %>
 <script>
-    alert("이미 투표한 항목입니다.");
+    alert("(;´・`)> : 이미 투표한 항목입니다.");
     window.location.replace("main.jsp");
 </script>
 <%

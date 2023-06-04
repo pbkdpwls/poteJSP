@@ -8,11 +8,20 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ItemRepository {
+    private static final String SELECT_ITEMS_QUERY = "SELECT item_id, name, board_id FROM item WHERE board_id = ?";
+    private static final String INSERT_ITEM_QUERY = "INSERT INTO item (name, board_id) VALUES (?, ?)";
+    private static final String SELECT_VOTE_COUNT_QUERY = "SELECT item.item_id, item.name, count(item.item_id) as 투표수\n" +
+            "FROM voter\n" +
+            "JOIN item ON voter.item_id = item.item_id\n" +
+            "JOIN board b ON item.board_id = b.board_id\n" +
+            "JOIN users u ON voter.users_id = u.users_id\n" +
+            "WHERE item.board_id = ?\n" +
+            "GROUP BY item.item_id, item.name";
+    private static final String SELECT_ITEM_NAMES_QUERY = "SELECT * FROM item WHERE board_id = ?";
 
     public List<Item> getItemList(int boardId) throws SQLException {
         Connection connection = DBConnection.getConnection();
-        String query = "SELECT item_id, name, board_id FROM item WHERE board_id = ?";
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(SELECT_ITEMS_QUERY);
         statement.setInt(1, boardId);
         List<Item> itemList = new ArrayList<>();
         ResultSet rs = statement.executeQuery();
@@ -29,44 +38,25 @@ public class ItemRepository {
         return itemList;
     }
 
-    //targetVote의 id를 food에 외래키로 지정하여 저장
     public Item saveFood(int boardId, Item item) throws SQLException {
         Connection connection = DBConnection.getConnection();
-
-        String sql = "INSERT INTO item (name, board_id) VALUES (?, ?)";
-
-        PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-
-        // INSERT 쿼리에 파라미터 설정
+        PreparedStatement pstmt = connection.prepareStatement(INSERT_ITEM_QUERY, Statement.RETURN_GENERATED_KEYS);
         pstmt.setString(1, item.getName());
         pstmt.setInt(2, boardId);
-
         pstmt.executeUpdate();
-
-        // 생성된 ID 값 가져오기
         ResultSet generatedKeys = pstmt.getGeneratedKeys();
         if (generatedKeys.next()) {
             int generatedId = generatedKeys.getInt(1);
             item.setItemId(generatedId);
         }
-
         System.out.println("저장 완료");
-
         connection.close();
-
         return item;
     }
 
     public HashMap<String, Integer> getVoteCount(int boardId) throws SQLException {
         Connection connection = DBConnection.getConnection();
-        String query = "SELECT item.item_id, item.name, count(item.item_id) as 투표수\n" +
-                "FROM voter\n" +
-                "         JOIN item ON voter.item_id = item.item_id\n" +
-                "         JOIN board b ON item.board_id = b.board_id\n" +
-                "         JOIN users u ON voter.users_id = u.users_id\n" +
-                "WHERE item.board_id = ?\n" +
-                "group by item.item_id, item.name";
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(SELECT_VOTE_COUNT_QUERY);
         statement.setInt(1, boardId);
         ResultSet rs = statement.executeQuery();
         HashMap<String, Integer> foodNameAndVoteCount = new HashMap<>();
@@ -81,8 +71,7 @@ public class ItemRepository {
 
     public HashMap<Integer, String> getItemNameInBoard(int boardId) throws SQLException {
         Connection connection = DBConnection.getConnection();
-        String query = "SELECT * FROM item WHERE board_id = ?";
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = connection.prepareStatement(SELECT_ITEM_NAMES_QUERY);
         statement.setInt(1, boardId);
         ResultSet rs = statement.executeQuery();
         HashMap<Integer, String> map = new HashMap<>();

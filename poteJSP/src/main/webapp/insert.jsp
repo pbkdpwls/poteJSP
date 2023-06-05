@@ -5,6 +5,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%
+    request.setCharacterEncoding("UTF-8");
     APIUser apiUser = (APIUser) session.getAttribute("apiUser");
     if (apiUser == null) {
         response.sendRedirect("index.jsp");

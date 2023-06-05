@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -99,7 +99,7 @@
 <body>
 <div class="container">
     <h2>투표 생성</h2>
-    <form action="createVote.jsp" method="POST">
+    <form action="createVote.jsp" method="POST" accept-charset="UTF-8">
         <div>
             <label for="title">제목</label>
             <input type="text" name="title" id="title" required>

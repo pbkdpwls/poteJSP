@@ -5,9 +5,10 @@
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
+    request.setCharacterEncoding("UTF-8");
     String token = (String) session.getAttribute("token");
     if (token == null) {
         response.sendRedirect("index.jsp");
@@ -20,6 +21,7 @@
 <html>
 <head>
     <title>vote create</title>
+    <meta charset="UTF-8">
 </head>
 <body>
 <%

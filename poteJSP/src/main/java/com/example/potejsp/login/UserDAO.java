@@ -1,5 +1,7 @@
 package com.example.potejsp.login;
 
+import com.example.potejsp.repository.DBConnection;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class UserDAO {
     }
 
     public static User userInsert(User user) {
-        Connection conn = GetConnection.getConnection();
+        Connection conn = DBConnection.getConnection();
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.ADD_USERS, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setString(1, user.getEmail());
             pstmt.setString(2, user.getNickname());
@@ -40,7 +42,7 @@ public class UserDAO {
 
     public static List<User> userSelectAll() {
         List<User> userList = new ArrayList<>();
-        Connection conn = GetConnection.getConnection();
+        Connection conn = DBConnection.getConnection();
 
         try (Statement stmt = conn.createStatement()){
             ResultSet rs = stmt.executeQuery(UserQuerry.SELECT_ALL);
@@ -62,7 +64,7 @@ public class UserDAO {
 
     public static User userSelectByEmail(String email) {
         User user = null;
-        Connection conn = GetConnection.getConnection();
+        Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_BY_EMAIL)) {
             pstmt.setString(1, email);
@@ -84,7 +86,7 @@ public class UserDAO {
 
     public static User userSelectByIdAndEmail(int id, String email) {
         User user = null;
-        Connection conn = GetConnection.getConnection();
+        Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_BY_ID_AND_EMAIL)) {
             pstmt.setInt(1, id);
@@ -107,7 +109,7 @@ public class UserDAO {
 
     public static User userSelectByEmailAndNaverId(String email, String naverId) {
         User user = null;
-        Connection conn = GetConnection.getConnection();
+        Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_BY_EMAIL_AND_NAVERID)) {
             pstmt.setString(1, email);

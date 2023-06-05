@@ -264,7 +264,7 @@
         // 현재 페이지 번호가 범위를 벗어나는 경우 첫 번째 또는 마지막 페이지로 이동
         if (currentPage < 1) {
             currentPage = 1;
-        } else if (currentPage > totalPages) {
+        } else if (totalPages > 0 && currentPage > totalPages) {
             currentPage = totalPages;
         }
 
@@ -334,7 +334,10 @@
 
         <button type="submit" class="btn" formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
         <button type="submit" class="btn" formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
-    </form>
+        <button type="submit" class="btn" formaction="viewVoter.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기</button>
+
+
+        </form>
 
     </div>
     <%

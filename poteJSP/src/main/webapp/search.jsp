@@ -3,9 +3,12 @@
 <%@ page import="com.example.potejsp.repository.BoardRepository" %>
 <%@ page import="com.example.potejsp.domain.Board" %>
 <%@ page import="com.example.potejsp.domain.Item" %>
-<%@ page import="com.example.potejsp.repository.ItemRepository"%>
+<%@ page import="com.example.potejsp.repository.ItemRepository" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.net.URLEncoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%!
     User user = null; %>
@@ -13,12 +16,12 @@
     String token = (String) session.getAttribute("token");
     if (token == null) {
         response.sendRedirect("index.jsp");
-        return ;
+        return;
     }
     user = JWToken.validTokenAndGetUser(token);
     if (user == null) {
         response.sendRedirect("index.jsp");
-        return ;
+        return;
     }
 %>
 <!DOCTYPE html>
@@ -26,11 +29,12 @@
 <head>
     <title>Index Page</title>
     <style>
-        body{
-            margin:0;
-            padding:0;
-            width:100%;
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
         }
+
         .header {
             height: 70px;
             width: 100%;
@@ -46,7 +50,7 @@
             margin-bottom: 50px;
         }
 
-        .indexBody{
+        .indexBody {
             width: 100%;
             margin: 0 auto;
             display: flex;
@@ -55,28 +59,28 @@
             justify-content: center;
         }
 
-        .indexHeader{
+        .indexHeader {
             display: flex;
             flex-direction: row;
             margin-bottom: 10px;
         }
 
-        .indexHeaderSearchInput{
+        .indexHeaderSearchInput {
             width: 500px;
             height: 30px;
             font-size: 15px;
-            padding:10px;
+            padding: 10px;
             box-sizing: border-box;
-            margin-right:180px;
+            margin-right: 180px;
         }
 
-        .indexHeaderTitle{
+        .indexHeaderTitle {
             font-size: 30px;
             font-weight: bold;
             margin-right: 30px;
         }
 
-        .indexHeaderFilter{
+        .indexHeaderFilter {
             fotn-size: 18px;
             font-weight: bold;
             color: dimgray;
@@ -143,10 +147,10 @@
             margin: 10px;
             font-weight: bold;
         }
+
         .item div.selected {
             border: 2px solid gold;
         }
-
 
 
         /*페이지 css*/
@@ -184,7 +188,7 @@
     var condition = 2; // 조건 변수, 1 또는 2로 설정
     var selectedItemId = null; // 선택된 아이템의 ID를 저장할 변수
 
-    window.onload = function() {
+    window.onload = function () {
         if (condition === 1) {
             document.querySelector('.loggedOut').style.display = 'block';
         } else if (condition === 2) {
@@ -193,7 +197,7 @@
     };
 
     function toggleDetails(boardId) {
-        var details = document.getElementById("details"+boardId);
+        var details = document.getElementById("details" + boardId);
         details.style.display = (details.style.display === "none") ? "block" : "none";
 
         var component = document.querySelector(".component[data-boardId='" + boardId + "']");
@@ -257,7 +261,7 @@
         List<Board> boardList = null;
         List<Item> itemList = null;
 
-        int currentPage=1; // 현재 페이지 번호
+        int currentPage = 1; // 현재 페이지 번호
         int pageSize = 5; // 페이지당 게시물 수
 
         String pageParam = request.getParameter("page");
@@ -288,26 +292,78 @@
 
         // 게시물 목록 출력
         for (Board board : boardList) {
+            HashMap<String, Integer> map;
+            try {
+                map = itemRepository.getVoteCount(board.getBoardId());
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
     %>
-    <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
-        <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
+    <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)"
+         style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
+        <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%>
+        </div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%>
+            / <%= board.getAddress()%> / <%= board.getNickname()%>
+        </div>
     </div>
     <div class="details" id="details<%=board.getBoardId()%>">
-        <div class="item">
-            <%
-                try {
-                    itemList = itemRepository.getItemList(board.getBoardId());
-                    for (Item item : itemList) { %>
-            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"><%= item.getName() %></div>
-            <% } %>
-            <%
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            %>
-        </div>
-        <div class="btn" onclick="toggleDetails(<%=board.getBoardId()%>)">확인</div>
+        <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
+            <div class="item">
+                <%
+                    try {
+                        itemList = itemRepository.getItemList(board.getBoardId());
+                        int maxVoteCount = 0;
+                        List<String> maxVotedItems = new ArrayList<>();
+                        if (board.getIsProgressed() == false) {
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount > maxVoteCount) {
+                                    maxVoteCount = voteCount;
+                                }
+                            }
+                            for (Item item : itemList) {
+                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                                if (voteCount == maxVoteCount) {
+                                    maxVotedItems.add(item.getName());
+                                }
+                            }
+                        }
+                        for (Item item : itemList) {
+                            int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                %>
+
+                <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
+                     style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
+                    <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
+                        <%= board.getIsProgressed() == false ? "disabled" : "" %>>
+                    <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                    <%= item.getName() %> <%= voteCount %>
+                </div>
+                <% } %>
+                <%
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                %>
+            </div>
+            <button type="submit" class="btn"
+                    <%= board.getIsProgressed() == false ? "disabled" : "" %>
+                    onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인
+            </button>
+
+            <button type="submit" class="btn"
+                    formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기
+            </button><!--다중투표일경우 없어도 됨-->
+            <button type="submit" class="btn"
+                    formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기
+            </button>
+            <button type="submit" class="btn"
+                    formaction="viewVoter.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기
+            </button>
+
+
+        </form>
     </div>
     <%
         }
@@ -315,11 +371,11 @@
 
     <div class="pagination">
         <% if (currentPage > 1) { %>
-        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage - 1 %>'">이전</button>
+        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage - 1 %>&searchInput=<%= URLEncoder.encode(searchInput, "UTF-8") %>'">이전</button>
         <% } %>
         <span class="current-page"><%= currentPage %></span>
         <% if (currentPage < totalPages) { %>
-        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage + 1 %>'">다음</button>
+        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage + 1 %>&searchInput=<%= URLEncoder.encode(searchInput, "UTF-8") %>'">다음</button>
         <% } %>
     </div>
 

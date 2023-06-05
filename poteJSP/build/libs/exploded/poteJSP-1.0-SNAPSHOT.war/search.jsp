@@ -146,6 +146,38 @@
         .item div.selected {
             border: 2px solid gold;
         }
+
+
+
+        /*페이지 css*/
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-button {
+            background-color: #CDDBF6;
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            margin: 0 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #333333;
+            transition: background-color 0.3s;
+        }
+
+        .page-button:hover {
+            background-color: #8FB1F2;
+            color: #FFFFFF;
+        }
+
+        .current-page {
+            font-weight: bold;
+            margin: 0 4px;
+        }
     </style>
 </head>
 <script>
@@ -225,12 +257,30 @@
         List<Board> boardList = null;
         List<Item> itemList = null;
 
+        int currentPage=1; // 현재 페이지 번호
+        int pageSize = 5; // 페이지당 게시물 수
+
+        String pageParam = request.getParameter("page");
+        if (pageParam != null && !pageParam.isEmpty()) {
+            currentPage = Integer.parseInt(pageParam);
+        }
+
+        int totalBoardCount = boardRepository.getTotalBoardCount();
+        int totalPages = (int) Math.ceil((double) totalBoardCount / pageSize);
+
+        // 현재 페이지 번호가 범위를 벗어나는 경우 첫 번째 또는 마지막 페이지로 이동
+        if (currentPage < 1) {
+            currentPage = 1;
+        } else if (totalPages > 0 && currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
         try {
             if (searchInput != null && !searchInput.isEmpty()) {
-                boardList = boardRepository.searchByKeyword(searchInput);
+                boardList = boardRepository.searchByKeyword(searchInput, currentPage);
             } else {
                 System.out.println(searchInput);
-                boardList = boardRepository.findAll(1);
+                boardList = boardRepository.findAll(currentPage);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -262,6 +312,16 @@
     <%
         }
     %>
+
+    <div class="pagination">
+        <% if (currentPage > 1) { %>
+        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage - 1 %>'">이전</button>
+        <% } %>
+        <span class="current-page"><%= currentPage %></span>
+        <% if (currentPage < totalPages) { %>
+        <button class="page-button" onclick="location.href='search.jsp?page=<%= currentPage + 1 %>'">다음</button>
+        <% } %>
+    </div>
 
 </div>
 </body>

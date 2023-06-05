@@ -95,13 +95,17 @@ public class BoardRepository {
 
 
     //board의 title, nickname 으로 검색
-    public List<Board> searchByKeyword(String keyword) throws SQLException {
+    public List<Board> searchByKeyword(String keyword, int pageNumber) throws SQLException {
+        int pageSize = 5; // 페이지당 결과 수
+
         Connection connection = DBConnection.getConnection();
 
-        String sql = "SELECT * FROM board WHERE title LIKE ? OR nickname LIKE ?";
+        String sql = "SELECT * FROM board WHERE title LIKE ? OR nickname LIKE ? ORDER BY start_date DESC LIMIT ?, ?";
         PreparedStatement pstmt = connection.prepareStatement(sql);
         pstmt.setString(1, "%" + keyword + "%");
         pstmt.setString(2, "%" + keyword + "%");
+        pstmt.setInt(3, (pageNumber - 1) * pageSize);
+        pstmt.setInt(4, pageSize);
 
         ResultSet rs = pstmt.executeQuery();
 

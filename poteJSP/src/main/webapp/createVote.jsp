@@ -32,14 +32,14 @@
         String date = request.getParameter("date");
         String usersCount = request.getParameter("usersCount");
         String location = request.getParameter("location");
-        String address = request.getParameter("address")
+        String address = request.getParameter("address");
         String[] menus = new String[5];
         for (int i = 1; i <= 5; i++) {
             menus[i - 1] = request.getParameter("menu" + i);
         }
 
         // Board 객체 생성 및 값 설정
-        Board board = new Board(title, LocalDateTime.parse(date), Integer.parseInt(usersCount), user.getNickname(),location,true);
+        Board board = new Board(title, LocalDateTime.parse(date), Integer.parseInt(usersCount), user.getNickname(), address,true);
 
 
         try {
@@ -61,6 +61,7 @@
             response.sendRedirect("main.jsp");
             return;
         } catch (Exception e) {
+            e.printStackTrace();
             out.print("<h2>투표 생성 시에 오류가 발생</h2>");
         }
     }

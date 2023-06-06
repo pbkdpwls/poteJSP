@@ -137,8 +137,8 @@ public class UserDAO {
         return user;
     }
 
-    public static Integer selectMakeCountByUserNickname(String nickname) {
-        Integer result = null;
+    public static int selectMakeCountByUserNickname(String nickname) {
+        int result = 0;
         Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_MAKE_COUNT_BY_USER_NICKNAME)) {
@@ -157,8 +157,8 @@ public class UserDAO {
         }
         return result;
     }
-    public static Integer selectVoteCountByUserId(int userId) {
-        Integer result = null;
+    public static int selectVoteCountByUserId(int userId) {
+        int result = 0;
         Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_VOTE_COUNT_BY_USER_ID)) {
@@ -179,7 +179,7 @@ public class UserDAO {
     }
 
     public static String selectItemNameByUserId(int userId) {
-        String result = null;
+        String result = "";
         Connection conn = DBConnection.getConnection();
 
         try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_ITEM_NAME_BY_USER_ID)) {

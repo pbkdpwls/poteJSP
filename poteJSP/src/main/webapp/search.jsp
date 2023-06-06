@@ -62,7 +62,9 @@
         .indexHeader {
             display: flex;
             flex-direction: row;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
+            width: 1000px;
+            justify-content: left;
         }
 
         .indexHeaderSearchInput {
@@ -71,7 +73,14 @@
             font-size: 15px;
             padding: 10px;
             box-sizing: border-box;
-            margin-right: 180px;
+            margin-right: 15px;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .indexHeaderSearchInput:focus {
+            outline:none;
         }
 
         .indexHeaderTitle {
@@ -80,10 +89,12 @@
             margin-right: 30px;
         }
 
-        .indexHeaderFilter {
-            fotn-size: 18px;
+        .indexHeaderSearchBtn{
+            height: 35px;
+            width: 60px;
+            background-color: white;
             font-weight: bold;
-            color: dimgray;
+            border-color: darkgray;
         }
 
         .buttons {
@@ -146,12 +157,9 @@
             cursor: pointer;
             margin: 10px;
             font-weight: bold;
+            border-color: #CDDBF6;
+            margin-left: 5px;
         }
-
-        .item div.selected {
-            border: 2px solid gold;
-        }
-
 
         /*페이지 css*/
         .pagination {
@@ -204,26 +212,6 @@
         component.style.border = (details.style.display === "none") ? "none" : "2px solid red";
     }
 
-    function toggleItem(element) {
-        var itemId = element.getAttribute("data-itemId"); // 클릭한 아이템의 ID를 가져옴
-
-        // 선택된 아이템이 있는 경우
-        if (selectedItemId !== null) {
-            var selectedItem = document.querySelector(".item div[data-itemId='" + selectedItemId + "']");
-            selectedItem.classList.remove("selected"); // 이전에 선택된 아이템의 스타일 제거
-        }
-
-        // 클릭한 아이템이 선택되어 있는 아이템과 같은 경우 (해제)
-        if (selectedItemId === itemId) {
-            selectedItemId = null; // 선택된 아이템 ID 초기화
-            return;
-        }
-
-        // 클릭한 아이템에 선택된 스타일 적용
-        element.classList.add("selected");
-        selectedItemId = itemId; // 선택된 아이템 ID 저장
-    }
-
     // function search(){
     //     var searchInput = document.getElementById("searchInput").value;
     //     location.href = "http://localhost:8080/pote/?searchInput=" + encodeURIComponent(searchInput);
@@ -249,7 +237,7 @@
         <div class="indexHeaderTitle">투표 목록</div>
         <form action="search.jsp" method="GET">
             <input type="text" name="searchInput" id="searchInput" class="indexHeaderSearchInput">
-            <input type="submit" value="검색"/>
+            <input type="submit" value="검색" class="indexHeaderSearchBtn"/>
         </form>
     </div>
 
@@ -303,11 +291,11 @@
          style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%>
         </div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getStartDate()%>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getStartDate()%> / 투표수 : <%= board.getUsersCount()%>
             / <%= board.getAddress()%> / <%= board.getNickname()%>
         </div>
     </div>
-    <div class="details" id="details<%=board.getBoardId()%>">
+    <div class="details" id="details<%=board.getBoardId()%>" style="<%=board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
             <div class="item">
                 <%

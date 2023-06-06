@@ -286,7 +286,7 @@
     %>
     <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getStartDate()%> / <%= board.getUsersCount()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
 
     <div class="details" id="details<%=board.getBoardId()%>">

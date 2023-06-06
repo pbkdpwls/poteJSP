@@ -303,7 +303,7 @@
          style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%>
         </div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getEndDate()%>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getStartDate()%>
             / <%= board.getAddress()%> / <%= board.getNickname()%>
         </div>
     </div>

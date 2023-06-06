@@ -29,15 +29,18 @@
         System.out.printf("생성 버튼 클릭");
         // 폼으로 전달된 값들을 받아옵니다.
         String title = request.getParameter("title");
-        String deadline = request.getParameter("deadline");
-        String address = request.getParameter("address");
+        String date = request.getParameter("date");
+        String usersCount = request.getParameter("usersCount");
+        String location = request.getParameter("location");
+        String address = request.getParameter("address")
         String[] menus = new String[5];
         for (int i = 1; i <= 5; i++) {
             menus[i - 1] = request.getParameter("menu" + i);
         }
 
         // Board 객체 생성 및 값 설정
-        Board board = new Board(title, LocalDateTime.parse(deadline), LocalDateTime.parse(deadline), user.getNickname(), address, true);
+        Board board = new Board(title, LocalDateTime.parse(date), Integer.parseInt(usersCount), user.getNickname(),location,true);
+
 
         try {
             // BoardRepository를 통해 Board를 저장합니다.

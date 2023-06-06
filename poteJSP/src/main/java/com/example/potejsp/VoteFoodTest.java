@@ -61,14 +61,14 @@ public class VoteFoodTest {
 //            System.out.println("================================");
 //        }
 
-                for (Board findBoard : boardRepository.findAll(2)) {
-            System.out.println(findBoard.getBoardId());
-            System.out.println(findBoard.getTitle());
-            System.out.println(findBoard.getStartDate());
-            System.out.println(findBoard.getEndDate());
-            System.out.println(findBoard.getAddress());
-            System.out.println("===========================");
-        }
+//                for (Board findBoard : boardRepository.findAll(2)) {
+//            System.out.println(findBoard.getBoardId());
+//            System.out.println(findBoard.getTitle());
+//            System.out.println(findBoard.getStartDate());
+//            System.out.println(findBoard.getEndDate());
+//            System.out.println(findBoard.getAddress());
+//            System.out.println("===========================");
+//        }
 
 
     }

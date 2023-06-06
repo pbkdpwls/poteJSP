@@ -10,7 +10,7 @@ public class Board {
 
     public LocalDateTime startDate;
 
-    public LocalDateTime endDate;
+    public int usersCount;
 
     public String nickname;
     public String address;
@@ -20,20 +20,20 @@ public class Board {
     public Board() {
     }
 
-    public Board(int boardId, String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address,boolean isProgressed) {
+    public Board(int boardId, String title, LocalDateTime startDate, int usersCount, String nickname, String address,boolean isProgressed) {
         this.boardId = boardId;
         this.title = title;
         this.startDate = startDate;
-        this.endDate = endDate;
+        this.usersCount = usersCount;
         this.nickname = nickname;
         this.address = address;
         this.isProgressed = isProgressed;
     }
 
-    public Board(String title, LocalDateTime startDate, LocalDateTime endDate, String nickname, String address,boolean isProgressed) {
+    public Board(String title, LocalDateTime startDate, int usersCount, String nickname, String address,boolean isProgressed) {
         this.title = title;
         this.startDate = startDate;
-        this.endDate = endDate;
+        this.usersCount = usersCount;
         this.nickname = nickname;
         this.address = address;
         this.isProgressed = isProgressed;
@@ -75,12 +75,12 @@ public class Board {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
-        return endDate;
+    public int getUsersCount() {
+        return usersCount;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
+    public void setUsersCount(int usersCount) {
+        this.usersCount = usersCount;
     }
 
     public String getAddress() {

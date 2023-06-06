@@ -14,14 +14,14 @@ public class BoardRepository {
     public Board saveBoard(Board board) throws SQLException {
         Connection connection = DBConnection.getConnection();
 
-        String sql = "INSERT INTO board (title, start_date, end_date, nickname, address,isProgressed) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO board (title, start_date, users_count, nickname, address,isProgressed) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement pstmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         // INSERT 쿼리에 파라미터 설정
         pstmt.setString(1, board.getTitle());
-        pstmt.setString(2, LocalDateTime.now().toString());
-        pstmt.setString(3, board.getEndDate().toString());
+        pstmt.setString(2, board.getStartDate().toString());
+        pstmt.setInt(3, board.getUsersCount());
         pstmt.setString(4, board.getNickname());
         pstmt.setString(5, board.getAddress());
         pstmt.setBoolean(6, board.getIsProgressed());
@@ -40,6 +40,135 @@ public class BoardRepository {
         connection.close();
 
         return board;
+    }
+
+
+    //board의 투표수 조회하기
+    public int selectVoterCount(int boardId) {
+        String sql = "select count(v.voter_id) from voter v " +
+                "join item i on i.item_id = v.item_id " +
+                "join board b on b.board_id = i.board_id " +
+                "where b.board_id = ?";
+
+        int count = 0;
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement pstmt = null;
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, boardId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return count;
+    }
+
+
+    //users_count 조회
+    public int selectUsersCount(int boardId) {
+        String sql = "select users_count from board where board_id = ?";
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement pstmt = null;
+
+        int count = 0;
+
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, boardId);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return count;
+    }
+
+
+    //board의 isProgressed 업데이트
+    public void updateIsProgressed(int boardId) {
+        String sql = "update board set isProgressed = 0 where board_id = ?;";
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, boardId);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("isProgressed 업데이트 성공");
+            } else {
+                System.out.println("isProgressed 업데이트 실패");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
+
+
+    //투표 결과(vote_result) 입력
+    public void updateVoteResult(int boardId, String voteResult) {
+        String sql = "UPDATE board SET vote_result = ? WHERE board_id = ?";
+
+        Connection connection = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            connection = DBConnection.getConnection();
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setString(1, voteResult);
+            pstmt.setInt(2, boardId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (pstmt != null) {
+                try {
+                    pstmt.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 
     // 전체 게시물 수 반환 메서드
@@ -79,12 +208,12 @@ public class BoardRepository {
             int id = rs.getInt("board_id");
             String title = rs.getString("title");
             LocalDateTime startDate = rs.getTimestamp("start_date").toLocalDateTime();
-            LocalDateTime endDate = rs.getTimestamp("end_date").toLocalDateTime();
+            int usersCount = rs.getInt("users_count");
             String nickname = rs.getString("nickname");
             String address = rs.getString("address");
             boolean isProgressed = rs.getBoolean("isProgressed");
 
-            Board board = new Board(id, title, startDate, endDate, nickname, address, isProgressed);
+            Board board = new Board(id, title, startDate, usersCount, nickname, address, isProgressed);
             boards.add(board);
         }
 
@@ -115,12 +244,12 @@ public class BoardRepository {
             int id = rs.getInt("board_id");
             String title = rs.getString("title");
             LocalDateTime startDate = rs.getTimestamp("start_date").toLocalDateTime();
-            LocalDateTime endDate = rs.getTimestamp("end_date").toLocalDateTime();
+            int usersCount = rs.getInt("users_count");
             String nickname = rs.getString("nickname");
             String address = rs.getString("address");
             boolean isProgressed = rs.getBoolean("isProgressed");
 
-            Board board = new Board(id, title, startDate, endDate, nickname, address, isProgressed);
+            Board board = new Board(id, title, startDate, usersCount, nickname, address, isProgressed);
             boards.add(board);
         }
 

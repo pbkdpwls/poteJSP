@@ -114,8 +114,12 @@
             <input type="text" name="title" id="title" required>
         </div>
         <div>
-            <label for="deadline">마감 기한</label>
-            <input type="datetime-local" name="deadline" id="deadline" required>
+            <label for="date">날짜</label>
+            <input type="datetime-local" name="date" id="date" required>
+        </div>
+        <div>
+            <label for="usersCount">인원수</label>
+            <input type="text" name="usersCount" id="usersCount" required>
         </div>
         <div>
             <label for="address">지역</label>

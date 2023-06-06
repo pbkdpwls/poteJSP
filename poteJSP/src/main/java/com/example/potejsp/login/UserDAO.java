@@ -40,6 +40,36 @@ public class UserDAO {
         return user;
     }
 
+    public static User userUpdate(User user, String beforeNickName) {
+        Connection conn = DBConnection.getConnection();
+        try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.UPDATE_USERS)) {
+            pstmt.setString(1, user.getNickname());
+            pstmt.setString(2, user.getAddress());
+            pstmt.setInt(3, user.getAge());
+            pstmt.setInt(4, user.getId());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            user = null;
+            System.out.println(e.getMessage());
+        }
+        if (user != null) {
+            try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.UPDATE_BOARDS)) {
+                pstmt.setString(1, user.getNickname());
+                pstmt.setString(2, beforeNickName);
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                user = null;
+                System.out.println(e.getMessage());
+            }
+        }
+        try {
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return user;
+    }
+
     public static List<User> userSelectAll() {
         List<User> userList = new ArrayList<>();
         Connection conn = DBConnection.getConnection();
@@ -105,6 +135,68 @@ public class UserDAO {
             e.printStackTrace();
         }
         return user;
+    }
+
+    public static int selectMakeCountByUserNickname(String nickname) {
+        int result = 0;
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_MAKE_COUNT_BY_USER_NICKNAME)) {
+            pstmt.setString(1, nickname);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                result = rs.getInt("make_count");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static int selectVoteCountByUserId(int userId) {
+        int result = 0;
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_VOTE_COUNT_BY_USER_ID)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                result = rs.getInt("vote_count");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String selectItemNameByUserId(int userId) {
+        String result = "";
+        Connection conn = DBConnection.getConnection();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(UserQuerry.SELECT_ITEM_NAME_BY_USER_ID)) {
+            pstmt.setInt(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+            while(rs.next()) {
+                result = rs.getString("name");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        try {
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     public static User userSelectByEmailAndNaverId(String email, String naverId) {

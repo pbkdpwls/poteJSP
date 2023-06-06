@@ -1,8 +1,15 @@
-<%@ page import="com.example.potejsp.login.APIUser" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="com.example.potejsp.login.User" %>
+<%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%! User user = null; %>
 <%
-    APIUser apiUser = (APIUser) session.getAttribute("apiUser");
-    if (apiUser == null) {
+    String token = (String) session.getAttribute("token");
+    if (token == null) {
+        response.sendRedirect("index.jsp");
+        return ;
+    }
+    user = JWToken.validTokenAndGetUser(token);
+    if (user == null) {
         response.sendRedirect("index.jsp");
         return ;
     }
@@ -80,10 +87,10 @@
     </style>
 </head>
 <body>
-    <h2>회원가입</h2>
-    <form action="insert.jsp" method="post" accept-charset="UTF-8">
-        <input type="text" id="email" name="email" value="<%=apiUser.getEmail()%>" readonly>
-        <input type="text" id="nickname" name="nickname" placeholder="Nickname">
+    <h2>회원 정보 수정</h2>
+    <form action="modify.jsp" method="post" accept-charset="UTF-8">
+        <input type="text" id="email" name="email" value="<%=user.getEmail()%>" readonly>
+        <input type="text" id="nickname" name="nickname" value="<%=user.getNickname()%>">
         <select name="address" id="address">
             <option value="강남구">강남구</option>
             <option value="강동구">강동구</option>
@@ -111,10 +118,8 @@
             <option value="중구">중구</option>
             <option value="중랑구">중랑구</option>
         </select>
-        <input type="password" id="naverId" name="naverId" value="<%=apiUser.getNaverId()%>" readonly>
-        <input type="text" id="age" name="age" placeholder="Age">
-        <button type="submit" class="insert-button">가입</button>
+        <input type="text" id="age" name="age" value="<%=user.getAge()%>">
+        <button type="submit" class="modify-button">수정</button>
 </form>
 </body>
 </html>
-

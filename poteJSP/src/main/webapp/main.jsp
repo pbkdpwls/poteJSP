@@ -60,28 +60,15 @@
         .indexHeader{
             display: flex;
             flex-direction: row;
-            margin-bottom: 10px;
-        }
-
-        .indexHeaderSearchInput{
-            width: 500px;
-            height: 30px;
-            font-size: 15px;
-            padding:10px;
-            box-sizing: border-box;
-            margin-right:180px;
+            margin-bottom: 20px;
+            width: 1000px;
+            justify-content: left;
         }
 
         .indexHeaderTitle{
             font-size: 30px;
             font-weight: bold;
             margin-right: 30px;
-        }
-
-        .indexHeaderFilter{
-            fotn-size: 18px;
-            font-weight: bold;
-            color: dimgray;
         }
 
         .buttons {
@@ -142,11 +129,9 @@
             border-radius: 5px;
             display: inline-block;
             cursor: pointer;
-            margin: 10px;
             font-weight: bold;
-        }
-        .item div.selected {
-            border: 2px solid gold;
+            border-color: #CDDBF6;
+            margin-left: 5px;
         }
 
 
@@ -194,31 +179,11 @@
     };
 
     function toggleDetails(boardId) {
-        var details = document.getElementById("details"+boardId);
+        var details = document.getElementById("details" + boardId);
         details.style.display = (details.style.display === "none") ? "block" : "none";
 
         var component = document.querySelector(".component[data-boardId='" + boardId + "']");
         component.style.border = (details.style.display === "none") ? "none" : "2px solid red";
-    }
-
-    function toggleItem(element) {
-        var itemId = element.getAttribute("data-itemId"); // 클릭한 아이템의 ID를 가져옴
-
-        // 선택된 아이템이 있는 경우
-        if (selectedItemId !== null) {
-            var selectedItem = document.querySelector(".item div[data-itemId='" + selectedItemId + "']");
-            selectedItem.classList.remove("selected"); // 이전에 선택된 아이템의 스타일 제거
-        }
-
-        // 클릭한 아이템이 선택되어 있는 아이템과 같은 경우 (해제)
-        if (selectedItemId === itemId) {
-            selectedItemId = null; // 선택된 아이템 ID 초기화
-            return;
-        }
-
-        // 클릭한 아이템에 선택된 스타일 적용
-        element.classList.add("selected");
-        selectedItemId = itemId; // 선택된 아이템 ID 저장
     }
 </script>
 
@@ -286,10 +251,12 @@
     %>
     <div class="component" onclick="toggleDetails(<%=board.getBoardId()%>)" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <div style="font-weight: bold; font-size: 30px; margin-top:20px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getTitle()%></div>
-        <div style="font-weight: bold; font-size: 17px; margin-top:5px"><%= board.getStartDate()%> / <%= board.getUsersCount()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
+        <div style="font-weight: bold; font-size: 17px; margin-top:5px; color: <%= board.getIsProgressed() == false ? "darkgray" : "black" %>"><%= board.getStartDate()%> / 투표수 : <%= board.getUsersCount()%> / <%= board.getAddress()%> / <%= board.getNickname()%></div>
     </div>
 
-    <div class="details" id="details<%=board.getBoardId()%>">
+    <div
+            class="details" id="details<%=board.getBoardId()%>"
+            style="<%=board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>">
         <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
             <div class="item">
                 <%
@@ -330,12 +297,13 @@
                 %>
             </div>
             <button type="submit" class="btn"
+                    style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>"
                     <%= board.getIsProgressed() == false ? "disabled" : "" %>
                     onclick="toggleDetails(<%=board.getBoardId()%>).submit();">확인</button>
 
-        <button type="submit" class="btn" formaction="reVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
-        <button type="submit" class="btn" formaction="undoVote.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
-        <button type="submit" class="btn" formaction="viewVoter.jsp" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기</button>
+        <button type="submit" class="btn" formaction="reVote.jsp" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>" <%= board.getIsProgressed() == false ? "disabled" : "" %>>다시 투표하기</button><!--다중투표일경우 없어도 됨-->
+        <button type="submit" class="btn" formaction="undoVote.jsp" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 취소하기</button>
+        <button type="submit" class="btn" formaction="viewVoter.jsp" style="<%= board.getIsProgressed() == false ? "background-color: #F5F5F5;" : ""%>" <%= board.getIsProgressed() == false ? "disabled" : "" %>>투표 현황보기</button>
 
 
         </form>

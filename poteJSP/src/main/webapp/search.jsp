@@ -237,6 +237,7 @@
         <button>회원가입</button>
     </div>
     <div class="buttons loggedIn">
+        <button onclick="location='mypage.jsp'">내정보</button>
         <button onclick="location='main.jsp'">메인화면</button>
         <button onclick="location='voteGenerate.jsp'">투표생성</button>
         <button onclick="location='logout.jsp'">로그아웃</button>

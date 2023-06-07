@@ -1,6 +1,8 @@
 <%@ page import="com.example.potejsp.login.UserDAO" %>
 <%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page import="com.example.potejsp.domain.User" %>
+<%@ page import="com.example.potejsp.repository.UserRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%
@@ -22,7 +24,7 @@
     user.setNickname(nickname);
     user.setAddress(address);
     user.setAge(age);
-    user = UserDAO.userUpdate(user, beforeNickname);
+    user = UserRepository.userUpdate(user, beforeNickname);
     if (user == null) {
 %>
     <script>

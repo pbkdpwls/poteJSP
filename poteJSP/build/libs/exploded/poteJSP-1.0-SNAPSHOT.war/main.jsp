@@ -1,4 +1,3 @@
-<%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
 <%@ page import="com.example.potejsp.repository.BoardRepository" %>
 <%@ page import="com.example.potejsp.domain.Board" %>
@@ -8,6 +7,8 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.example.potejsp.domain.User" %>
+<%@ page import="com.example.potejsp.repository.VoterRepository" %>
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
@@ -212,6 +213,7 @@
     <%
         BoardRepository boardRepository = new BoardRepository();
         ItemRepository itemRepository = new ItemRepository();
+        VoterRepository voterRepository = new VoterRepository();
 
         List<Board> boardList = null;
         List<Item> itemList = null;
@@ -244,7 +246,7 @@
         for (Board board : boardList) {
             HashMap<String, Integer> map;
             try {
-                map = itemRepository.getVoteCount(board.getBoardId());
+                map = voterRepository.getVoteCount(board.getBoardId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -260,39 +262,35 @@
         <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
             <div class="item">
                 <%
-                    try {
-                        itemList = itemRepository.getItemList(board.getBoardId());
-                        int maxVoteCount = 0;
-                        List<String> maxVotedItems = new ArrayList<>();
-                        if (board.getIsProgressed() == false) {
-                            for (Item item : itemList) {
-                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                                if (voteCount > maxVoteCount) {
-                                    maxVoteCount = voteCount;
-                                }
-                            }
-                            for (Item item : itemList) {
-                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                                if (voteCount == maxVoteCount) {
-                                    maxVotedItems.add(item.getName());
-                                }
+                    itemList = itemRepository.getItemList(board.getBoardId());
+                    int maxVoteCount = 0;
+                    List<String> maxVotedItems = new ArrayList<>();
+                    if (board.getIsProgressed() == false) {
+                        for (Item item : itemList) {
+                            int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                            if (voteCount > maxVoteCount) {
+                                maxVoteCount = voteCount;
                             }
                         }
                         for (Item item : itemList) {
                             int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                %>
-
-                <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
-                     style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
-                    <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
-                        <%= board.getIsProgressed() == false ? "disabled" : "" %>>
-                    <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
-                    <%= item.getName() %> <%= voteCount %>
-                </div>
-                <%
+                            if (voteCount == maxVoteCount) {
+                                maxVotedItems.add(item.getName());
+                            }
                         }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+                    }
+                    for (Item item : itemList) {
+                        int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+            %>
+
+            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
+                 style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
+                <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
+                    <%= board.getIsProgressed() == false ? "disabled" : "" %>>
+                <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                <%= item.getName() %> <%= voteCount %>
+            </div>
+            <%
                     }
                 %>
             </div>

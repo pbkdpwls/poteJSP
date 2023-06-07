@@ -1,6 +1,7 @@
-<%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
-<%@ page import="com.example.potejsp.login.UserDAO" %>
+<%@ page import="com.example.potejsp.domain.User" %>
+<%@ page import="com.example.potejsp.repository.BoardRepository" %>
+<%@ page import="com.example.potejsp.repository.VoterRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -85,23 +86,23 @@
                     <table class="table table-bordered">
                         <tr>
                             <th style="text-align:center">투표 만든 횟수</th>
-                            <td style="text-align:center"><%= UserDAO.selectMakeCountByUserNickname(user.getNickname()) %></td>
+                            <td style="text-align:center"><%= BoardRepository.selectMakeCountByUserNickname(user.getNickname()) %></td>
                         </tr>
                         <tr>
                             <th style="text-align:center">투표 참여 횟수</th>
-                            <td style="text-align:center"><%= UserDAO.selectVoteCountByUserId(user.getId()) %></td>
+                            <td style="text-align:center"><%= VoterRepository.selectVoteCountByUserId(user.getId()) %></td>
                         </tr>
                         <tr>
                             <th style="text-align:center">선정된 횟수</th>
-                            <td style="text-align:center"><%= UserDAO.countMyChoiceResultByUserId(user.getId()) %></td>
+                            <td style="text-align:center"><%= BoardRepository.countMyChoiceResultByUserId(user.getId()) %></td>
                         </tr>
                         <tr>
                             <th style="text-align:center">가장 많이 고른 매뉴</th>
-                            <td style="text-align:center"><%= UserDAO.selectItemNameByUserId(user.getId()) %></td>
+                            <td style="text-align:center"><%= VoterRepository.selectItemNameByUserId(user.getId()) %></td>
                         </tr>
                         <tr>
                             <th style="text-align:center">가장 많이 선정된 매뉴</th>
-                            <td style="text-align:center"><%= UserDAO.selectChoiceNameByUserId(user.getId()) %></td>
+                            <td style="text-align:center"><%= VoterRepository.selectChoiceNameByUserId(user.getId()) %></td>
                         </tr>
                     </table>
                 </div>

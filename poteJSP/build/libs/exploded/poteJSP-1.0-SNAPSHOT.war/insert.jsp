@@ -2,6 +2,9 @@
 <%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.login.APIUser" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
+<%@ page import="com.example.potejsp.domain.APIUser" %>
+<%@ page import="com.example.potejsp.domain.User" %>
+<%@ page import="com.example.potejsp.repository.UserRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%
@@ -33,7 +36,7 @@
         newUser.setAddress(address);
         newUser.setAge(age);
         newUser.setNaverId(naverId);
-        newUser = UserDAO.userInsert(newUser);
+        newUser = UserRepository.userInsert(newUser);
         if (newUser.getId() == 0) {
 %>
     <script>

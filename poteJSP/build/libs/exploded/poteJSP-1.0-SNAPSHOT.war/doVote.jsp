@@ -1,11 +1,11 @@
 <%@ page import="com.example.potejsp.repository.VoterRepository" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
-<%@ page import="com.example.potejsp.login.User" %>
 <%@ page import="com.example.potejsp.repository.BoardRepository" %>
 <%@ page import="com.example.potejsp.repository.ItemRepository" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.Random" %>
+<%@ page import="com.example.potejsp.domain.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -51,7 +51,7 @@
     ItemRepository itemRepository = new ItemRepository();
     int result = 0;
     // 주소 검사
-    int valAddr = voterRepository.validateAddress(board_id, user_id);
+    int valAddr = boardRepository.validateAddress(board_id, user_id);
     System.out.println("valadrr : " + valAddr);
     if (valAddr > 0) {
         // 권한 검사(중복투표 방지)
@@ -66,14 +66,14 @@
                 // 투표 실행
                 result = voterRepository.vote(user_id, item_id);
 
-                int voterCount = boardRepository.selectVoterCount(board_id); //해당 board의 투표수 조회
+                int voterCount = voterRepository.selectVoterCount(board_id); //해당 board의 투표수 조회
                 int usersCount = boardRepository.selectUsersCount(board_id); //해당 board의 usersCount 조회
 
                 if(voterCount >= usersCount) {  //인원수 다 채워지면
                     boardRepository.updateIsProgressed(board_id);   //투표 못하게 isProgressed 0으로 처리
 
 
-                    HashMap<String, Integer> voteCountResult = itemRepository.getVoteCount(board_id); // 아이템 이름당 투표수 구하기
+                    HashMap<String, Integer> voteCountResult = voterRepository.getVoteCount(board_id); // 아이템 이름당 투표수 구하기
 
                     int maxVoteCount = 0;
                     String mostVotedItem = null;

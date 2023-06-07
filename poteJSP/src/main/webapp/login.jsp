@@ -5,6 +5,9 @@
 <%@ page import="com.fasterxml.jackson.databind.ObjectMapper" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="com.example.potejsp.login.*" %>
+<%@ page import="com.example.potejsp.domain.APIUser" %>
+<%@ page import="com.example.potejsp.domain.User" %>
+<%@ page import="com.example.potejsp.repository.UserRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <html>
@@ -50,7 +53,7 @@
             out.println("유저 정보를 가져오지 못했습니다.");
             return ;
         }
-        User user = UserDAO.userSelectByEmailAndNaverId(apiUser.getEmail(), apiUser.getNaverId());
+        User user = UserRepository.userSelectByEmailAndNaverId(apiUser.getEmail(), apiUser.getNaverId());
         if (user == null) {
             session.setAttribute("apiUser", apiUser);
             response.sendRedirect("join.jsp");

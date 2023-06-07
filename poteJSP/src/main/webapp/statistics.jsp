@@ -3,6 +3,9 @@
 <%@ page import="com.example.potejsp.repository.UserRepository" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.example.potejsp.repository.BoardRepository" %>
+<%@ page import="com.example.potejsp.repository.VoterRepository" %>
+<%@ page import="com.example.potejsp.repository.ItemRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%! User user = null; %>
 <%
@@ -56,7 +59,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">총 유저수</h5>
-                    <h1 class="display-4"><%= UserDAO.countAllUser() %></h1>
+                    <h1 class="display-4"><%= UserRepository.countAllUser() %></h1>
                 </div>
             </div>
         </div>
@@ -102,7 +105,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">총 투표 개수</h5>
-                    <h1 class="display-4"><%= UserDAO.countAllBoard() %></h1>
+                    <h1 class="display-4"><%= BoardRepository.countAllBoard() %></h1>
                 </div>
             </div>
         </div>
@@ -112,7 +115,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">총 투표 참여 횟수</h5>
-                    <h1 class="display-4"><%= UserDAO.countAllVoter() %></h1>
+                    <h1 class="display-4"><%= VoterRepository.countAllVoter() %></h1>
                 </div>
             </div>
         </div>
@@ -122,7 +125,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">가장 많이 선정된 매뉴</h5>
-                    <h1 class="display-4"><%= UserDAO.selectBestVoteResult() %></h1>
+                    <h1 class="display-4"><%= BoardRepository.selectBestVoteResult() %></h1>
                 </div>
             </div>
         </div>
@@ -132,7 +135,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">가장 많이 투표된 매뉴</h5>
-                    <h1 class="display-4"><%= UserDAO.selectBestChoiceResult() %></h1>
+                    <h1 class="display-4"><%= ItemRepository.selectBestChoiceResult() %></h1>
                 </div>
             </div>
         </div>

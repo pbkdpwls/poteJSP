@@ -302,40 +302,36 @@
         <form id="itemForm<%=board.getBoardId()%>" method="POST" action="doVote.jsp">
             <div class="item">
                 <%
-                    try {
-                        itemList = itemRepository.getItemList(board.getBoardId());
-                        int maxVoteCount = 0;
-                        List<String> maxVotedItems = new ArrayList<>();
-                        if (board.getIsProgressed() == false) {
-                            for (Item item : itemList) {
-                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                                if (voteCount > maxVoteCount) {
-                                    maxVoteCount = voteCount;
-                                }
-                            }
-                            for (Item item : itemList) {
-                                int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                                if (voteCount == maxVoteCount) {
-                                    maxVotedItems.add(item.getName());
-                                }
+                    itemList = itemRepository.getItemList(board.getBoardId());
+                    int maxVoteCount = 0;
+                    List<String> maxVotedItems = new ArrayList<>();
+                    if (board.getIsProgressed() == false) {
+                        for (Item item : itemList) {
+                            int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+                            if (voteCount > maxVoteCount) {
+                                maxVoteCount = voteCount;
                             }
                         }
                         for (Item item : itemList) {
                             int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
-                %>
-
-                <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
-                     style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
-                    <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
-                        <%= board.getIsProgressed() == false ? "disabled" : "" %>>
-                    <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
-                    <%= item.getName() %> <%= voteCount %>
-                </div>
-                <% } %>
-                <%
-                    } catch (SQLException e) {
-                        e.printStackTrace();
+                            if (voteCount == maxVoteCount) {
+                                maxVotedItems.add(item.getName());
+                            }
+                        }
                     }
+                    for (Item item : itemList) {
+                        int voteCount = map.get(item.getName()) == null ? 0 : map.get(item.getName());
+            %>
+
+            <div onclick="toggleItem(this)" data-itemId="<%= item.getItemId() %>"
+                 style="background-color: <%= maxVotedItems.contains(item.getName()) ? "#8FB1F2" : "" %>">
+                <input type="radio" name="item_id" value="<%=item.getItemId()%>" onclick="toggleItem(this)"
+                    <%= board.getIsProgressed() == false ? "disabled" : "" %>>
+                <input type="hidden" name="board_id" value="<%=board.getBoardId()%>">
+                <%= item.getName() %> <%= voteCount %>
+            </div>
+            <% } %>
+                <%
                 %>
             </div>
             <button type="submit" class="btn"

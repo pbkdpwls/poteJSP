@@ -1,5 +1,6 @@
 package com.example.potejsp.login;
 
+import com.example.potejsp.domain.APIUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;

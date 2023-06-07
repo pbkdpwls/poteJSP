@@ -1,5 +1,7 @@
 package com.example.potejsp.login;
 
+import com.example.potejsp.domain.User;
+import com.example.potejsp.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,7 +32,7 @@ public class JWToken {
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
-            User user = UserDAO.userSelectByIdAndEmail(Integer.parseInt(claims.getSubject()), claims.get("email").toString());
+            User user = UserRepository.userSelectByIdAndEmail(Integer.parseInt(claims.getSubject()), claims.get("email").toString());
             if (user == null)
                 return false;
         } catch (Exception e) {
@@ -46,7 +48,7 @@ public class JWToken {
                     .setSigningKey(secretKey)
                     .parseClaimsJws(token)
                     .getBody();
-            user = UserDAO.userSelectByIdAndEmail(Integer.parseInt(claims.getSubject()), claims.get("email").toString());
+            user = UserRepository.userSelectByIdAndEmail(Integer.parseInt(claims.getSubject()), claims.get("email").toString());
         } catch (Exception e) {
             return null;
         }

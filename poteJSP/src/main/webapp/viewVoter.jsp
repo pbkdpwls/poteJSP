@@ -7,7 +7,7 @@
 --%>
 <%@ page import="com.example.potejsp.repository.VoterRepository" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
-<%@ page import="com.example.potejsp.login.User" %>
+<%@ page import="com.example.potejsp.domain.User" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.example.potejsp.domain.Item" %>
 <%@ page import="com.example.potejsp.repository.ItemRepository" %>

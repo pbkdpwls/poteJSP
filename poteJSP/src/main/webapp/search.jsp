@@ -1,4 +1,4 @@
-<%@ page import="com.example.potejsp.login.User" %>
+<%@ page import="com.example.potejsp.domain.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
 <%@ page import="com.example.potejsp.repository.BoardRepository" %>
 <%@ page import="com.example.potejsp.domain.Board" %>
@@ -9,6 +9,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.net.URLEncoder" %>
+<%@ page import="com.example.potejsp.repository.VoterRepository" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%!
     User user = null; %>
@@ -246,6 +247,7 @@
         String searchInput = request.getParameter("searchInput");
         BoardRepository boardRepository = new BoardRepository();
         ItemRepository itemRepository = new ItemRepository();
+        VoterRepository voterRepository = new VoterRepository();
 
         List<Board> boardList = null;
         List<Item> itemList = null;
@@ -283,7 +285,7 @@
         for (Board board : boardList) {
             HashMap<String, Integer> map;
             try {
-                map = itemRepository.getVoteCount(board.getBoardId());
+                map = voterRepository.getVoteCount(board.getBoardId());
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

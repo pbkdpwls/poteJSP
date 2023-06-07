@@ -44,7 +44,7 @@ public class BoardRepository {
 
 
     //board의 투표수 조회하기
-    public int selectVoterCount(int boardId) {
+    public int selectVoterCount(int boardId) throws SQLException {
         String sql = "select count(v.voter_id) from voter v " +
                 "join item i on i.item_id = v.item_id " +
                 "join board b on b.board_id = i.board_id " +
@@ -67,12 +67,14 @@ public class BoardRepository {
             throw new RuntimeException(e);
         }
 
+        connection.close();
+
         return count;
     }
 
 
     //users_count 조회
-    public int selectUsersCount(int boardId) {
+    public int selectUsersCount(int boardId) throws SQLException {
         String sql = "select users_count from board where board_id = ?";
 
         Connection connection = DBConnection.getConnection();
@@ -93,9 +95,39 @@ public class BoardRepository {
             throw new RuntimeException(e);
         }
 
+        connection.close();
+
         return count;
     }
 
+
+    //IsProgressed 조회
+    public int selectIsProgressed(int boardId) throws SQLException {
+        String sql = "select isProgressed from board where board_id = ?";
+
+        Connection connection = DBConnection.getConnection();
+        PreparedStatement pstmt = null;
+
+        int isProgressed = 0;
+
+        try {
+            pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, boardId);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                isProgressed = rs.getInt("isProgressed");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        connection.close();
+
+        return isProgressed;
+
+    }
 
     //board의 isProgressed 업데이트
     public void updateIsProgressed(int boardId) {

@@ -15,24 +15,35 @@
     String email = request.getParameter("email");
     String nickname = request.getParameter("nickname");
     String address = request.getParameter("address");
-    String naverId = request.getParameter("naverId");
-    int age = Integer.parseInt(request.getParameter("age"));
-    User newUser = new User();
-    newUser.setEmail(email);
-    newUser.setNickname(nickname);
-    newUser.setAddress(address);
-    newUser.setAge(age);
-    newUser.setNaverId(naverId);
-    newUser = UserDAO.userInsert(newUser);
-    if (newUser.getId() == 0) {
+    if (nickname.trim().isEmpty()) {
+
+%>
+<script>
+    alert("회원가입 실패");
+    location.href = "join.jsp";
+</script>
+<%
+
+    } else {
+        String naverId = request.getParameter("naverId");
+        int age = Integer.parseInt(request.getParameter("age"));
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setNickname(nickname);
+        newUser.setAddress(address);
+        newUser.setAge(age);
+        newUser.setNaverId(naverId);
+        newUser = UserDAO.userInsert(newUser);
+        if (newUser.getId() == 0) {
 %>
     <script>
         alert("회원가입 실패");
         location.href = "join.jsp";
     </script>
 <%
-    } else {
-        session.setAttribute("token", JWToken.getToken(newUser));
-        response.sendRedirect("main.jsp");
+        } else {
+            session.setAttribute("token", JWToken.getToken(newUser));
+            response.sendRedirect("main.jsp");
+        }
     }
 %>

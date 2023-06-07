@@ -20,7 +20,7 @@ public class UserQuerry {
     public static final String SELECT_CHOICE_NAME_BY_USER_ID = "select bo.vote_result from voter as vt " +
             "join item it on it.item_id = vt.item_id " +
             "join board bo on bo.board_id = it.board_id " +
-            "where users_id = ? " +
+            "where users_id = ? and bo.vote_result is not null" +
             "group by bo.vote_result " +
             "order by count(*) desc limit 1";
 
@@ -28,7 +28,7 @@ public class UserQuerry {
     public static final String COUNT_ALL_USER = "select count(*) as users_count from users";
     public static final String COUNT_ALL_BOARD = "select count(*) as board_count from board";
     public static final String COUNT_ALL_VOTER = "select count(*) as voter_count from voter";
-    public static final String SELECT_BEST_VOTE_RESULT = "select vote_result from board group by vote_result order by count(board_id) desc limit 1";
+    public static final String SELECT_BEST_VOTE_RESULT = "select vote_result from board where vote_result is not null group by vote_result order by count(board_id) desc limit 1";
     public static final String SELECT_BEST_CHOICE_RESULT = "select name from item group by name order by count(item_id) desc limit 1";
 
     public static final String COUNT_MY_CHOICE_RESULT_BY_USER_ID = "select count(*) as my_choice_count " +

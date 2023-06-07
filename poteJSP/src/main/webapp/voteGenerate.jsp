@@ -114,7 +114,7 @@
             <input type="text" name="title" id="title" required>
         </div>
         <div>
-            <label for="date">날짜</label>
+            <label for="date">약속 날짜</label>
             <input type="datetime-local" name="date" id="date" required>
         </div>
         <div>

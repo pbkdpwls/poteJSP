@@ -18,7 +18,7 @@ public class NaverAPI {
 
     static {
         try {
-            redirectURI = URLEncoder.encode("http://localhost:8080/pote/login.jsp", "UTF-8");
+            redirectURI = URLEncoder.encode("http://15.165.114.92:8080/pote/login.jsp", "UTF-8");
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

@@ -54,70 +54,78 @@
     int valAddr = voterRepository.validateAddress(board_id, user_id);
     System.out.println("valadrr : " + valAddr);
     if (valAddr > 0) {
-        // 권한 검사
+        // 권한 검사(중복투표 방지)
         int val = voterRepository.validateVoter(0, user_id, item_id, board_id);
         System.out.println(val);
         if (val > 0) {
-            // 투표 실행
-            result = voterRepository.vote(user_id, item_id);
 
-            int voterCount = boardRepository.selectVoterCount(board_id); //해당 board의 투표수 조회
-            int usersCount = boardRepository.selectUsersCount(board_id); //해당 board의 usersCount 조회
+            // isProgressed 체크
+            if (boardRepository.selectIsProgressed(board_id) == 0) {
+                response.sendRedirect("index.jsp");
+            } else {
+                // 투표 실행
+                result = voterRepository.vote(user_id, item_id);
 
-            if(voterCount >= usersCount) {  //인원수 다 채워지면
-                boardRepository.updateIsProgressed(board_id);   //투표 못하게 isProgressed 0으로 처리
+                int voterCount = boardRepository.selectVoterCount(board_id); //해당 board의 투표수 조회
+                int usersCount = boardRepository.selectUsersCount(board_id); //해당 board의 usersCount 조회
+
+                if(voterCount >= usersCount) {  //인원수 다 채워지면
+                    boardRepository.updateIsProgressed(board_id);   //투표 못하게 isProgressed 0으로 처리
 
 
-                HashMap<String, Integer> voteCountResult = itemRepository.getVoteCount(board_id); // 아이템 이름당 투표수 구하기
+                    HashMap<String, Integer> voteCountResult = itemRepository.getVoteCount(board_id); // 아이템 이름당 투표수 구하기
 
-                int maxVoteCount = 0;
-                String mostVotedItem = null;
-                int count = 0;
+                    int maxVoteCount = 0;
+                    String mostVotedItem = null;
+                    int count = 0;
 
-                // 최다 투표수 찾기
-                for (Map.Entry<String, Integer> entry : voteCountResult.entrySet()) {
-                    int voteCount = entry.getValue();
-                    if (voteCount > maxVoteCount) {
-                        maxVoteCount = voteCount;
-                        count = 1; // 최다 투표수 변경 시 count 초기화
-                    } else if (voteCount == maxVoteCount) {
-                        count++; // 동점인 아이템 개수 증가
-                    }
-                }
-
-                // 동점인 경우 랜덤하게 아이템 선택
-                if (count > 1) {
-                    Random random = new Random();
-                    int randomIndex = random.nextInt(count);
-
-                    int currentIndex = 0;
+                    // 최다 투표수 찾기
                     for (Map.Entry<String, Integer> entry : voteCountResult.entrySet()) {
-                        String itemName = entry.getKey();
                         int voteCount = entry.getValue();
-                        if (voteCount == maxVoteCount) {
-                            if (currentIndex == randomIndex) {
+                        if (voteCount > maxVoteCount) {
+                            maxVoteCount = voteCount;
+                            count = 1; // 최다 투표수 변경 시 count 초기화
+                        } else if (voteCount == maxVoteCount) {
+                            count++; // 동점인 아이템 개수 증가
+                        }
+                    }
+
+                    // 동점인 경우 랜덤하게 아이템 선택
+                    if (count > 1) {
+                        Random random = new Random();
+                        int randomIndex = random.nextInt(count);
+
+                        int currentIndex = 0;
+                        for (Map.Entry<String, Integer> entry : voteCountResult.entrySet()) {
+                            String itemName = entry.getKey();
+                            int voteCount = entry.getValue();
+                            if (voteCount == maxVoteCount) {
+                                if (currentIndex == randomIndex) {
+                                    mostVotedItem = itemName;
+                                    break;
+                                }
+                                currentIndex++;
+                            }
+                        }
+                    } else {
+                        // 동점이 아닌 경우, 최다 투표수를 받은 아이템 이름 추출
+                        for (Map.Entry<String, Integer> entry : voteCountResult.entrySet()) {
+                            String itemName = entry.getKey();
+                            int voteCount = entry.getValue();
+                            if (voteCount == maxVoteCount) {
                                 mostVotedItem = itemName;
                                 break;
                             }
-                            currentIndex++;
                         }
                     }
-                } else {
-                    // 동점이 아닌 경우, 최다 투표수를 받은 아이템 이름 추출
-                    for (Map.Entry<String, Integer> entry : voteCountResult.entrySet()) {
-                        String itemName = entry.getKey();
-                        int voteCount = entry.getValue();
-                        if (voteCount == maxVoteCount) {
-                            mostVotedItem = itemName;
-                            break;
-                        }
-                    }
+
+                    boardRepository.updateVoteResult(board_id, mostVotedItem);  //투표결과 입력
+
+
                 }
-
-            boardRepository.updateVoteResult(board_id, mostVotedItem);  //투표결과 입력
-
-
             }
+
+
 
             if (result > 0) {
 %>

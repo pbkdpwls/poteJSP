@@ -1,4 +1,4 @@
-package com.example.potejsp.login;
+package com.example.potejsp.domain;
 
 public class User {
     int id;

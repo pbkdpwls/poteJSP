@@ -1,6 +1,6 @@
-<%@ page import="com.example.potejsp.login.User" %>
+<%@ page import="com.example.potejsp.domain.User" %>
 <%@ page import="com.example.potejsp.login.JWToken" %>
-<%@ page import="com.example.potejsp.login.UserDAO" %>
+<%@ page import="com.example.potejsp.repository.UserRepository" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -18,7 +18,7 @@
     }
     List<Integer> dataList = new ArrayList<>();
     for (int i = 0; i < 25; i++) {
-        dataList.add(UserDAO.selectRegionCount(i)); // 실제 데이터를 넣으세요.
+        dataList.add(UserRepository.selectRegionCount(i)); // 실제 데이터를 넣으세요.
     }
 %>
 <!DOCTYPE html>

@@ -51,8 +51,8 @@ JSP를 활용하여 투표 시스템을 제작하였습니다. 투표 게시글 
 - 회원 개인 통계 (투표 생성/참여 횟수, 선정 횟수, 가장 많이 고른/선정된 메뉴)
 
 
-시스템 구성도
+**시스템 구성도**
 ![무제 001](https://github.com/POTE-3306/poteJSP/assets/62551459/b5e11a57-f1ca-422b-9553-8317529f4855)
 
-ER Diagram
+**ER Diagram**
 <img width="728" alt="스크린샷 2023-06-06 오후 10 17 22" src="https://github.com/POTE-3306/poteJSP/assets/62551459/987f040b-9c71-468f-94f7-aae42447d221">
